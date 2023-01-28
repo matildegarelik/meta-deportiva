@@ -240,14 +240,14 @@
                   <!-- Add icons to the links using the .nav-icon class
                        with font-awesome or any other icon font library -->
                   <li class="nav-item">
-                    <a href="{{route('home.admin')}}" class="nav-link active">
+                    <a href="{{route('home.admin')}}" class="nav-link {{ Route::is('home.admin') ? 'active' : '' }}">
                       <i class="nav-icon fas fa-tachometer-alt"></i>
                       <p>Dashboard</p>
                     </a>
                     
                   </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
+                  <li class="nav-item {{ Route::is('admin.users') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ Route::is('admin.users') ? 'active' : '' }}">
                       <i class="nav-icon fas fa-user-alt"></i>
                       <p>
                         Usuarios
@@ -256,7 +256,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                       <li class="nav-item">
-                        <a href="{{  route('admin.users') }}" class="nav-link">
+                        <a href="{{  route('admin.users') }}" class="nav-link {{ Route::is('admin.users') ? 'active' : '' }}">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Listado</p>
                         </a>
@@ -264,19 +264,19 @@
                       <li class="nav-item">
                         <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
-                          <p>Crear</p>
+                          <p>Participantes</p>
                         </a>
                       </li>
                       <li class="nav-item">
                         <a href="pages/layout/boxed.html" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
-                          <p>Roles</p>
+                          <p>Organizadores</p>
                         </a>
                       </li>
                     </ul>
                   </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
+                  <li class="nav-item {{ str_contains(Request::segment(2),'events') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{  str_contains(Request::segment(2),'event') ? 'active' : '' }}">
                       <i class="nav-icon fas fa-calendar-alt"></i>
                       <p>
                         Events
@@ -285,13 +285,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                       <li class="nav-item">
-                        <a href="{{ route('admin.events') }}" class="nav-link">
+                        <a href="{{ route('admin.events') }}" class="nav-link {{ Route::is('admin.events') ? 'active' : '' }}">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Listar</p>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="{{ route('admin.event.new') }}" class="nav-link">
+                        <a href="{{ route('admin.event.new') }}" class="nav-link {{ Route::is('admin.event.new') ? 'active' : '' }}">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Crear</p>
                         </a>
@@ -304,7 +304,35 @@
                       </li>
                     </ul>
                   </li>
-                  
+                  <li class="nav-item {{ str_contains(Request::segment(2),'organizations') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{  str_contains(Request::segment(2),'organiza') ? 'active' : '' }}">
+                      <i class="nav-icon far fa-building"></i>
+                      <p>
+                        Organizations
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                      <li class="nav-item">
+                        <a href="{{ route('admin.organizations') }}" class="nav-link {{ Route::is('admin.organizations') ? 'active' : '' }}">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Listar</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="{{ route('admin.organization.new') }}" class="nav-link {{ Route::is('admin.organization.new') ? 'active' : '' }}">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Crear</p>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="pages/charts/inline.html" class="nav-link">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>Organizadores</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
                 </ul>
               </nav>
               <!-- /.sidebar-menu -->

@@ -21,18 +21,17 @@ return new class extends Migration
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->text('description');
-            $table->string('main_image');
+            $table->string('main_image')->nullable();
             $table->string('location');
-            $table->boolean('featured_event');
-            $table->string('fb_page');
-            $table->string('ig_page');
-            $table->string('website');
-            $table->string('external_link');
-            $table->string('results');
+            $table->boolean('featured_event')->default(0);
+            $table->boolean('published')->default(0);
+            $table->string('fb_page')->nullable();
+            $table->string('ig_page')->nullable();
+            $table->string('website')->nullable();
+            $table->string('external_link')->nullable();
+            //$table->string('results')->nullable();
             $table->bigInteger('user_id')->unsigned()->index();
-            $table->bigInteger('organizador_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('organizador_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

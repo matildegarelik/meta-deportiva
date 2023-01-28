@@ -41,15 +41,20 @@
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="type">Type</label>
-                                <input type="text" class="form-control" name="type">
+                                <select class="form-control" name="type">
+                                  <option>Publico</option>
+                                  <option>Privado</option>
+                                </select>
                             </div>
                             <div class="form-group col-sm">
                                 <label for="casification">Casification</label>
                                 <input type="text" class="form-control" name="casification">
                             </div>
                             <div class="form-check col-sm">
-                                <input type="checkbox" class="form-check-input mt-4" name="featured">
-                                <label class="form-check-label ml-5 mt-4" for="featured">Featured event?</label>
+                                <input type="checkbox" class="form-check-input" name="featured">
+                                <label class="form-check-label ml-5" for="featured">Featured event?</label>
+                                <input type="checkbox" class="form-check-input" name="published">
+                                <label class="form-check-label ml-5" for="featured">Published?</label>
                               </div>
                         </div>
                         <div class="row">
