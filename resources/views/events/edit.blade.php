@@ -42,6 +42,20 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
+                                <label for="name">Organizer</label>
+                                <select class="form-control select2bs4" name="organizer">
+                                    @foreach($organizations as $organization)
+                                    <optgroup label="{{$organization->name}}">
+                                        @foreach($organization->organizers as $organizer)
+                                        <option value="{{$organizer->id}}" @if($event->organizer_id==$organizer->id) selected @endif>{{$organizer->user->name}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm">
                                 <label for="type">Type</label>
                                 <input type="text" class="form-control" name="type"  value="{{$event->type}}">
                             </div>
@@ -50,9 +64,11 @@
                                 <input type="text" class="form-control" name="casification"  value="{{$event->clasification}}">
                             </div>
                             <div class="form-check col-sm">
-                                <input type="checkbox" class="form-check-input mt-4" name="featured">
+                                <input type="checkbox" class="form-check-input mt-4" name="featured" @if($event->featured_event) checked @endif>
                                 <label class="form-check-label ml-5 mt-4" for="featured">Featured event?</label>
-                                </div>
+                                <input type="checkbox" class="form-check-input mt-4" name="published" @if($event->published) checked @endif>
+                                <label class="form-check-label ml-5 mt-4" for="published">Published event?</label>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
@@ -129,4 +145,12 @@
   </div>
   <!-- /.content-header -->
 
+@endsection
+
+@section('js')
+<script type="text/javascript">
+$('.select2bs4').select2({
+    theme: 'bootstrap4'
+  })
+</script>
 @endsection

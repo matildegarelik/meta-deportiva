@@ -24,7 +24,14 @@
         <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-        
+
+        <!-- Select2 -->
+        <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/select2/css/select2.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+
+        <!-- SweetAlert2 -->
+        <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+
         <!-- iCheck -->
         <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
         <!-- JQVMap -->
@@ -52,14 +59,14 @@
           </div>
         
           <!-- Navbar -->
-          <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+          <nav class="main-header navbar navbar-expand navbar-white navbar-light"  style = "z-index: 1040 !important;">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
               <li class="nav-item">
                 <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
               </li>
               <li class="nav-item d-none d-sm-inline-block">
-                <a href="index3.html" class="nav-link">Home</a>
+                <a href="@if(Auth::user()->role=='admin') {{route('home.admin')}} @else {{route('home.organizador')}} @endif" class="nav-link">Home</a>
               </li>
               <li class="nav-item d-none d-sm-inline-block">
                 <a href="#" class="nav-link">Contact</a>
@@ -202,7 +209,7 @@
           <!-- /.navbar -->
         
           <!-- Main Sidebar Container -->
-          <aside class="main-sidebar sidebar-dark-primary elevation-4">
+          <aside class="main-sidebar sidebar-dark-primary elevation-4"  style = "z-index: 1040 !important;">
             <!-- Brand Logo -->
             <a href="#" class="brand-link">
               <!--<img src="{{ asset('assets/admin-lte/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">-->
@@ -239,6 +246,8 @@
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                   <!-- Add icons to the links using the .nav-icon class
                        with font-awesome or any other icon font library -->
+                  
+                  @if (Auth::user()->role=='admin')     
                   <li class="nav-item">
                     <a href="{{route('home.admin')}}" class="nav-link {{ Route::is('home.admin') ? 'active' : '' }}">
                       <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -262,13 +271,13 @@
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                        <a href="#" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Participantes</p>
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="pages/layout/boxed.html" class="nav-link">
+                        <a href="#" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Organizadores</p>
                         </a>
@@ -297,7 +306,7 @@
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="pages/charts/inline.html" class="nav-link">
+                        <a href="#" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Asignar</p>
                         </a>
@@ -326,13 +335,30 @@
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="pages/charts/inline.html" class="nav-link">
+                        <a href="#" class="nav-link">
                           <i class="far fa-circle nav-icon"></i>
                           <p>Organizadores</p>
                         </a>
                       </li>
                     </ul>
                   </li>
+                  @else
+
+                  <li class="nav-item">
+                    <a href="{{route('home.organizador')}}" class="nav-link {{ Route::is('home.organizador') ? 'active' : '' }}">
+                      <i class="nav-icon fas fa-tachometer-alt"></i>
+                      <p>Dashboard</p>
+                    </a>
+                    
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{route('organizador.events')}}" class="nav-link {{ str_contains(Request::segment(2),'event') ? 'active' : '' }}">
+                      <i class="nav-icon fas fa-calendar-alt"></i>
+                      <p>My Events</p>
+                    </a>
+                    
+                  </li>
+                  @endif
                 </ul>
               </nav>
               <!-- /.sidebar-menu -->
@@ -366,11 +392,19 @@
         <!-- jQuery UI 1.11.4 -->
         <script src="{{ asset('assets/admin-lte/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
         <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
         <script>
           $.widget.bridge('uibutton', $.ui.button)
         </script>
         <!-- Bootstrap 4 -->
         <script src="{{ asset('assets/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        
+        <!-- Select2 -->
+        <script src="{{ asset('assets/admin-lte/plugins/select2/js/select2.full.min.js') }}"></script>
+        <!-- SweetAlert2 -->
+        <script src="{{ asset('assets/admin-lte/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+        
         <!-- ChartJS -->
         <script src="{{ asset('assets/admin-lte/plugins/chart.js/Chart.min.js') }}"></script>
         <!-- Sparkline -->

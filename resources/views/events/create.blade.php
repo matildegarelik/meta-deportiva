@@ -30,7 +30,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body px-3">
-                    <form method="POST" action="{{ route('admin.event.create') }}">
+                    <form method="POST" action="{{ route('admin.event.create') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="form-group col-sm">
@@ -38,6 +38,21 @@
                                 <input type="text" class="form-control" name="name">
                             </div>
                         </div>
+                        <div class="row">
+                          <div class="form-group col-sm">
+                              <label for="name">Organizer</label>
+                              <select class="form-control select2bs4" name="organizer">
+                                <option value="">Select...</option>
+                                  @foreach($organizations as $organization)
+                                  <optgroup label="{{$organization->name}}">
+                                      @foreach($organization->organizers as $organizer)
+                                      <option value="{{$organizer->id}}">{{$organizer->user->name}}</option>
+                                      @endforeach
+                                  </optgroup>
+                                  @endforeach
+                              </select>
+                          </div>
+                      </div>
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="type">Type</label>
@@ -66,6 +81,19 @@
                                 <label for="end_date">End date</label>
                                 <input type="date" class="form-control" name="end_date">
                             </div>
+                            <div class="form-group col-sm">
+                              <label for="main_image">Main image</label>
+                              <!--<div class="input-group">
+                                  <div class="custom-file">
+                                      <input type="file" class="custom-file-input" name="main_image" accept="image/png, image/jpeg">
+                                      <label class="custom-file-label" for="exampleInputFile">Choose file..</label>
+                                  </div>
+                                  <div class="input-group-append">
+                                      <span class="input-group-text">Upload</span>
+                                  </div>
+                              </div>-->
+                              <input type="file" name="main_image" accept="image/png, image/jpeg">
+                          </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
@@ -79,16 +107,8 @@
                                 <input type="text" class="form-control" name="location">
                             </div>
                             <div class="form-group col-sm">
-                                <label for="main_image">Main image</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name="main_image">
-                                        <label class="custom-file-label" for="exampleInputFile">Choose file..</label>
-                                    </div>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">Upload</span>
-                                    </div>
-                                </div>
+                                <label for="location">MAPA</label>
+                                <input type="text" class="form-control" name="coordenadas" disabled value="A IMPLEMENTAR">
                             </div>
                         </div>
                         <div class="row">
@@ -131,4 +151,12 @@
   </div>
   <!-- /.content-header -->
 
+@endsection
+
+@section('js')
+<script type="text/javascript">
+$('.select2bs4').select2({
+    theme: 'bootstrap4'
+  })
+</script>
 @endsection

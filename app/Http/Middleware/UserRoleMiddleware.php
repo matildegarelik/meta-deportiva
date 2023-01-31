@@ -17,9 +17,10 @@ class UserRoleMiddleware
      */
     public function handle(Request $request, Closure $next, $role)
     {
-        if(Auth::check() && Auth::user()->role == $role){
+        $role = array_slice(func_get_args(), 2);
+        if(Auth::check() && in_array(Auth::user()->role,$role)){
             return $next($request);
         }
-        return response()->json([["Usuario no autorizado para acceder a esta página (rol:".$role.")"]]);
+        return response()->json([["Usuario no autorizado para acceder a esta página"]]);
     }
 }

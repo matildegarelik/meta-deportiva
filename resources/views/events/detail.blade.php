@@ -39,6 +39,12 @@
                         </div>
                     </div>
                     <div class="row">
+                      <div class="form-group col-sm">
+                          <label for="name">Organizador</label>
+                          <input type="text" class="form-control" name="organizer" value="{{$event->organizer->user->name}} ({{$event->organizer->organization->name}})" readonly>
+                      </div>
+                  </div>
+                    <div class="row">
                         <div class="form-group col-sm">
                             <label for="type">Type</label>
                             <input type="text" class="form-control" name="type"  value="{{$event->type}}" readonly>
@@ -48,9 +54,12 @@
                             <input type="text" class="form-control" name="casification"  value="{{$event->clasification}}" readonly>
                         </div>
                         <div class="form-check col-sm">
-                            <input type="checkbox" class="form-check-input mt-4" name="featured">
+                            <input type="checkbox" class="form-check-input mt-4" name="featured" @if($event->featured_event) checked @endif disabled>
                             <label class="form-check-label ml-5 mt-4" for="featured">Featured event?</label>
-                            </div>
+                            <input type="checkbox" class="form-check-input mt-4" name="published" @if($event->published) checked @endif disabled>
+                            <label class="form-check-label ml-5 mt-4" for="published">Published event?</label>
+                          
+                          </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-sm">
@@ -75,15 +84,7 @@
                         </div>
                         <div class="form-group col-sm">
                             <label for="main_image">Main image</label>
-                            <div class="input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="main_image">
-                                    <label class="custom-file-label" for="exampleInputFile">Choose file..</label>
-                                </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Upload</span>
-                                </div>
-                            </div>
+                            <p><img src="{{ asset('images/'.$event->main_image) }}" style="max-height: 70px;"></p>
                         </div>
                     </div>
                     <div class="row">
@@ -152,6 +153,7 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Categorias</h3>
+                  <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target='#add-category-modal'>Agregar</button>
                 </div>
                 <div class="card-body">
                   <div class="card-body">
@@ -163,6 +165,7 @@
                         <th>Name</th>
                         <th>Price</th>
                         <th>Availability</th>
+                        <th>Actions</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -172,6 +175,10 @@
                               <td>{{$category->name}}</td>
                               <td>${{$category->price}}</td>
                               <td>{{$category->availability}}</td>
+                              <td>
+                                <a href="#" class="btn-link" data-toggle="modal" data-target='#edit-category-modal' data-obj="{{$category}}"><i class="fas fa-pencil-alt ml-1"></i></a>
+                                <a href="#" class="btn-link" onclick="deleteCategory({{$category->id}})"><i class="fas fa-trash ml-1"></i></a>
+                              </td>
                           </tr>
                           @endforeach
                           
@@ -185,6 +192,7 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Cupones</h3>
+                  <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target='#add-cupon-modal'>Agregar</button>
                 </div>
                 <div class="card-body">
                   <div class="card-body">
@@ -193,18 +201,27 @@
                       <thead>
                       <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Availability</th>
+                        <th>Code</th>
+                        <th>Discount amount</th>
+                        <th>Percentage</th>
+                        <th>Valid</th>
+                        <th>Usage limit</th>
+                        <th>Actions</th>
                       </tr>
                       </thead>
                       <tbody>
-                        @foreach($categories as $category)
+                        @foreach($cupons as $cupon)
                           <tr>
-                              <td>{{$category->id}}</td>
-                              <td>{{$category->name}}</td>
-                              <td>${{$category->price}}</td>
-                              <td>{{$category->availability}}</td>
+                              <td>{{$cupon->id}}</td>
+                              <td>{{$cupon->code}}</td>
+                              <td>${{$cupon->discount_amount}}</td>
+                              <td>{{$cupon->percentage}}%</td>
+                              <td>{{$cupon->valid_from}} - {{$cupon->valid_to}}</td>
+                              <td>{{$cupon->usage_limit}}</td>
+                              <td>
+                                <a href="#" class="btn-link" data-toggle="modal" data-target='#edit-cupon-modal' data-obj="{{$cupon}}"><i class="fas fa-pencil-alt ml-1"></i></a>
+                                <a href="#" class="btn-link" onclick="deleteCupon({{$cupon->id}})"><i class="fas fa-trash ml-1"></i></a>
+                              </td>
                           </tr>
                           @endforeach
                           
@@ -218,6 +235,7 @@
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Preguntas</h3>
+                  <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target='#add-question-modal'>Agregar</button>
                 </div>
                 <div class="card-body">
                   <div class="card-body">
@@ -226,18 +244,25 @@
                       <thead>
                       <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Availability</th>
+                        <th>Type</th>
+                        <th>Content</th>
+                        <th>Required</th>
+                        <th>Order</th>
+                        <th>Actions</th>
                       </tr>
                       </thead>
                       <tbody>
-                        @foreach($categories as $category)
+                        @foreach($questions as $question)
                           <tr>
-                              <td>{{$category->id}}</td>
-                              <td>{{$category->name}}</td>
-                              <td>${{$category->price}}</td>
-                              <td>{{$category->availability}}</td>
+                              <td>{{$question->id}}</td>
+                              <td>@if($question->type==1) Open field @elseif($question->type==1) Yes/No @else Select one option @endif</td>
+                              <td>{{$question->content}}</td>
+                              <td>@if($question->required) Yes @else No @endif</td>
+                              <td>{{$question->order}}</td>
+                              <td>
+                                <a href="#" class="btn-link" data-toggle="modal" data-target='#edit-question-modal' data-obj="{{$question}}"><i class="fas fa-pencil-alt ml-1"></i></a>
+                                <a href="#" class="btn-link" onclick="deleteQuestion({{$question->id}})"><i class="fas fa-trash ml-1"></i></a>
+                              </td>
                           </tr>
                           @endforeach
                           
@@ -255,6 +280,12 @@
       </section>
       <!-- /.content -->
     </div><!-- /.container-fluid -->
+    @include('events.modals.add-category',['id'=>$event->id])
+    @include('events.modals.edit-category')
+    @include('events.modals.add-cupon',['id'=>$event->id])
+    @include('events.modals.edit-cupon')
+    @include('events.modals.add-question',['id'=>$event->id])
+    @include('events.modals.edit-question')
   </div>
   <!-- /.content-header -->
 
@@ -308,5 +339,151 @@
       }).buttons().container().appendTo('#questions-table_wrapper .col-md-6:eq(0)');
 
     });
+
+    $('#edit-category-modal').on('show.bs.modal', function(e) {
+
+      var category = $(e.relatedTarget).data('obj');
+      console.log(category)
+      $(e.currentTarget).find('span#id-cat').html(category.id);
+      $(e.currentTarget).find('input[name="id"]').val(category.id);
+      $(e.currentTarget).find('input[name="name"]').val(category.name);
+      $(e.currentTarget).find('input[name="price"]').val(category.price);
+      $(e.currentTarget).find('input[name="availability"]').val(category.availability);
+      $(e.currentTarget).find('input[name="age_from"]').val(category.age_from);
+      $(e.currentTarget).find('input[name="age_to"]').val(category.age_to);
+      $(e.currentTarget).find('select[name="gender"]').val(category.gender);
+    });
+    function deleteCategory(id){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          var url = '{{ route("admin.event.delete_category", ":id") }}';
+          url = url.replace(':id', id);
+          $.ajax({
+            method:'GET',
+            url: url
+
+          }).done((response)=>{
+            Swal.fire(
+                'Deleted!',
+                'Your category has been deleted.',
+                'success'
+              ).then(()=>{
+                document.location.reload(true)
+              })
+          }).fail((response)=>{
+            Swal.fire(
+                'Not deleted!',
+                'Your category was not deleted.',
+                'warning'
+              )
+          })
+          
+        }
+      })
+    }
+
+    $('#edit-cupon-modal').on('show.bs.modal', function(e) {
+      var cupon = $(e.relatedTarget).data('obj');
+      //console.log(cupon)
+      $(e.currentTarget).find('span#id-cup').html(cupon.id);
+      $(e.currentTarget).find('input[name="id"]').val(cupon.id);
+      $(e.currentTarget).find('input[name="code"]').val(cupon.code);
+      $(e.currentTarget).find('input[name="discount_amount"]').val(cupon.discount_amount);
+      $(e.currentTarget).find('input[name="percentage"]').val(cupon.percentage);
+      $(e.currentTarget).find('input[name="valid_from"]').val(cupon.valid_from);
+      $(e.currentTarget).find('input[name="valid_to"]').val(cupon.valid_to);
+      $(e.currentTarget).find('input[name="usage_limit"]').val(cupon.usage_limit);
+    });
+    function deleteCupon(id){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          var url = '{{ route("admin.event.delete_cupon", ":id") }}';
+          url = url.replace(':id', id);
+          $.ajax({
+            method:'GET',
+            url: url
+
+          }).done((response)=>{
+            Swal.fire(
+                'Deleted!',
+                'Your cupon has been deleted.',
+                'success'
+              ).then(()=>{
+                document.location.reload(true)
+              })
+          }).fail((response)=>{
+            Swal.fire(
+                'Not deleted!',
+                'Your cupon was not deleted.',
+                'warning'
+              )
+          })
+    
+        }
+      })
+    }
+
+    $('#edit-question-modal').on('show.bs.modal', function(e) {
+      var question = $(e.relatedTarget).data('obj');
+      //console.log(category)
+      $(e.currentTarget).find('span#id-quest').html(question.id);
+      $(e.currentTarget).find('input[name="id"]').val(question.id);
+      $(e.currentTarget).find('select[name="type"]').val(question.type);
+      $(e.currentTarget).find('input[name="content"]').val(question.content);
+      $(e.currentTarget).find('select[name="required"]').val(question.required);
+      $(e.currentTarget).find('input[name="order"]').val(question.order);
+    });
+    function deleteQuestion(id){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          var url = '{{ route("admin.event.delete_question", ":id") }}';
+          url = url.replace(':id', id);
+          $.ajax({
+            method:'GET',
+            url: url
+
+          }).done((response)=>{
+            Swal.fire(
+                'Deleted!',
+                'Your question has been deleted.',
+                'success'
+              ).then(()=>{
+                document.location.reload(true)
+              })
+          }).fail((response)=>{
+            Swal.fire(
+                'Not deleted!',
+                'Your question was not deleted.',
+                'warning'
+              )
+          })
+          
+        }
+      })
+    }
   </script>
 @endsection

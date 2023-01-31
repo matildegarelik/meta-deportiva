@@ -13,7 +13,8 @@ class Cupon extends Model
         'percentage',
         'valid_from',
         'valid_to',
-        'usage_limit'
+        'usage_limit',
+        'event_id'
     ];
     public $timestamps = false;
 }

@@ -36,6 +36,10 @@
                             <label for="name">Name</label>
                             <input type="text" class="form-control" name="name" value="{{$organization->name}}" readonly>
                         </div>
+                        <div class="form-group col-sm">
+                          <label for="name">Contacto principal</label>
+                          <input type="text" class="form-control" name="name" value="{{$organization->user->name}}" readonly>
+                      </div>
                     </div>
                     
                     <div class="row">
@@ -58,10 +62,11 @@
               <!-- /.card -->
 
 
-              <!-- CATEGORIES -->
+              <!-- ORGANIZADORES -->
               <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Organizadores</h3>
+                  <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target='#add-organizer-modal'>Agregar</button>
                 </div>
                 <div class="card-body">
                   <div class="card-body">
@@ -80,9 +85,51 @@
                           <tr>
                               <td>{{$organizador->id}}</td>
                               <td>{{$organizador->name}}</td>
-                              <td>${{$organizador->email}}</td>
+                              <td>{{$organizador->email}}</td>
                               <td></td>
                           </tr>
+                          @endforeach
+                          
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- EVENTOS -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Eventos</h3>
+                  <a href="{{ route('admin.event.new') }}" target="_blank" class="btn btn-info pull-right">Agregar</a>
+                </div>
+                <div class="card-body">
+                  <div class="card-body">
+                   
+                    <table id="events-table" class="table table-bordered table-hover">
+                      <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Tipo</th>
+                        <th>Organizador</th>
+                        <th>Actions</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        @foreach($organization->organizers as $org)
+                          @foreach($org->events as $event)
+                            <tr>
+                                <td>{{$event->id}}</td>
+                                <td>{{$event->name}}</td>
+                                <td>{{$event->type}}</td>
+                                <td>{{$org->user->name}}</td>
+                                <td>
+                                  <a href="{{ route('admin.event', ['id'=>$event->id]) }}"><i class="fas fa-eye ml-1"></i></a>
+                                  <a href="{{ route('admin.event.edit', ['id'=>$event->id]) }}"><i class="fas fa-pencil-alt ml-1"></i></a>
+                                  <a href="#" onclick="deleteEvent({{$event->id}})"><i class="fas fa-trash ml-1"></i></a>
+                                </td>
+                            </tr>
+                            @endforeach
                           @endforeach
                           
                       </tbody>
@@ -99,11 +146,16 @@
         <!-- /.container-fluid -->
       </section>
       <!-- /.content -->
-    </div><!-- /.container-fluid -->
+      
+    </div>
+    <!-- /.container-fluid -->
+    @include('organizations.add-organizer-modal',['id'=>$organization->id])
   </div>
   <!-- /.content-header -->
 
 @endsection
+
+
 
 @section('js')
 <script>
@@ -119,6 +171,46 @@
         "buttons": ["copy", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#organizadores-table_wrapper .col-md-6:eq(0)');
     })
+
+    function deleteEvent(id){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          var url = '{{ route("admin.event.delete", ":id") }}';
+          url = url.replace(':id', id);
+          $.ajax({
+            method:'GET',
+            url: url
+
+          }).done((response)=>{
+            Swal.fire(
+                'Deleted!',
+                'Your event has been deleted.',
+                'success'
+              ).then(()=>{
+                document.location.reload(true)
+              })
+            
+            
+          }).fail((response)=>{
+            Swal.fire(
+                'Not deleted!',
+                'Your event could not have been deleted.',
+                'warning'
+              )
+          })
+          
+        }
+      })
+    }
+
 </script>
 
 @endsection

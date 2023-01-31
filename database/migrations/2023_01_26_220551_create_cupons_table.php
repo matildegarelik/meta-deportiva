@@ -21,6 +21,8 @@ return new class extends Migration
             $table->date('valid_from')->useCurrent();
             $table->date('valid_to')->nullable();
             $table->integer('usage_limit')->default(999);
+            $table->bigInteger('event_id')->unsigned()->index();
+            $table->foreign('event_id')->references('id')->on('events');
         });
     }
 

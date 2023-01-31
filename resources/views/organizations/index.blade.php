@@ -35,7 +35,7 @@
                       <th>#</th>
                       <th>Name</th>
                       <th>Website</th>
-                      <th>ID contacto principal</th>
+                      <th>Contacto principal</th>
                       <th>Actions</th>
                     </tr>
                     </thead>
@@ -45,11 +45,11 @@
                             <td>{{$organization->id}}</td>
                             <td>{{$organization->name}}</td>
                             <td>{{$organization->website}}</td>
-                            <td>{{$organization->user_id}}</td>
+                            <td>{{$organization->user->name}}</td>
                             <td>
                               <a href="{{ route('admin.organization', ['id'=>$organization->id]) }}"><i class="fas fa-eye ml-1"></i></a>
                               <a href="{{ route('admin.organization.edit', ['id'=>$organization->id]) }}"><i class="fas fa-pencil-alt ml-1"></i></a>
-                              <i class="fas fa-trash ml-1"></i>
+                              <a href="#" onclick="deleteOrganization({{$organization->id}})"><i class="fas fa-trash ml-1"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -99,5 +99,43 @@
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
     });
+    function deleteOrganization(id){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this! All organizers will be deleted too.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          var url = '{{ route("admin.organization.delete", ":id") }}';
+          url = url.replace(':id', id);
+          $.ajax({
+            method:'GET',
+            url: url
+
+          }).done((response)=>{
+            Swal.fire(
+                'Deleted!',
+                'Your organization has been deleted.',
+                'success'
+              ).then(()=>{
+                document.location.reload(true)
+              })
+            
+            
+          }).fail((response)=>{
+            Swal.fire(
+                'Not deleted!',
+                'Your organization could not have been deleted.',
+                'warning'
+              )
+          })
+          
+        }
+      })
+    }
   </script>
 @endsection

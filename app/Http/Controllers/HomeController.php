@@ -33,7 +33,8 @@ class HomeController extends Controller
 
     public function organizadorHome()
     {
-        return view('home',["msg"=>"I am Organizador role"]);
+        //return view('home',["msg"=>"I am Organizador role"]);
+        return view('organizador.index');
     }
 
     public function adminHome()

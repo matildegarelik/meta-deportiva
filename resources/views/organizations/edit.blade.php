@@ -39,6 +39,14 @@
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" name="name" value="{{$organization->name}}">
                             </div>
+                            <div class="form-group col-sm">
+                              <label for="name">Contacto principal</label>
+                              <select class="form-control" name="contacto_principal">
+                                @foreach($organization->organizers as $organizador)
+                                <option value="{{$organizador->user_id}}" @if($organization->user->id==$organizador->user_id) selected @endif>{{$organizador->user->name}}</option>
+                                @endforeach
+                              </select>
+                          </div>
                         </div>
                         
                         <div class="row">

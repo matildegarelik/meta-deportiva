@@ -11,4 +11,13 @@ class Organization extends Model
     protected $fillable=[
         'name','website','fb_page','ig_page','user_id'
     ];
+
+    public function organizers()
+    {
+        return $this->hasMany(Organizer::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

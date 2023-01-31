@@ -25,4 +25,9 @@ class Event extends Model
         'user_id',
         'organizador_id'
     ];
+
+    public function organizer()
+    {
+        return $this->belongsTo(Organizer::class);
+    }
 }

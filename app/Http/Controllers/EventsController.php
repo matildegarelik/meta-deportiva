@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Event;
 use App\Models\EventInscripto;
 use App\Models\Category;
+use App\Models\Cupon;
+use App\Models\Question;
+use App\Models\Organization;
+use App\Models\Organizer;
 
 class EventsController extends Controller
 {
@@ -21,17 +26,28 @@ class EventsController extends Controller
         $inscriptos = DB::table('event_inscriptos')->select(['event_inscriptos.event_id','users.name as name', 'event_inscriptos.user_id', 'users.email as email'])
             ->join('users','users.id','=','event_inscriptos.user_id')->where('event_id',$id)->get();
         $categories = Category::where('event_id',$id)->get();
-        return view('events.detail',['event'=>Event::find($id),'inscriptos'=>$inscriptos,'categories'=>$categories]);
+        $cupons=Cupon::where('event_id',$id)->get();
+        $questions=Question::where('event_id',$id)->get();
+        return view('events.detail',['event'=>Event::find($id),'inscriptos'=>$inscriptos,'categories'=>$categories, 'cupons'=>$cupons, 'questions'=>$questions]);
     }
     public function new_event()
     {
-        return view('events.create');
+        $organizations = Organization::all();
+        return view('events.create',compact('organizations'));
     }
     public function create_event(Request $request)
     {
         // hacer validaciones
         $input = $request->all();
-        $event = array(
+
+        $request->validate([
+            'main_image' => 'required|image|mimes:png,jpg,jpeg|max:2048'
+        ]);
+
+        $imageName = time().'.'.$request->main_image->extension();
+        $request->main_image->move(public_path('images'), $imageName);
+
+        $event = Event::create([
             'type'=>$input["type"],
             'clasification'=>$input["casification"],
             'name'=>$input["name"],
@@ -43,25 +59,34 @@ class EventsController extends Controller
             'external_link'=>$input["external_link"],
             'fb_page'=>$input["fb_page"],
             'ig_page'=>$input["ig_page"],
-            'main_image'=>'',
-            'featured_event'=>false,
+            'main_image'=>$imageName,
+            'featured_event'=>isset($input['featured']) ? true : false,
+            'published'=>isset($input['published']) ? true : false,
             //'results'=>'',
-            'user_id'=>1,
-            //'organizer_id'=>1
-        );
-        // falta main image, featured event, user creador
-        DB::table('events')->insert($event);
+            'user_id'=>Auth::user()->id,
+            'organizer_id'=>$input['organizer']
+        ]);
+        // falta main image y location
+        //DB::table('events')->insert($event);
         return redirect()->route('admin.events');
+        
         
     }
     public function edit_event($id)
     {
-        return view('events.edit',['event'=>Event::find($id)]);
+        $organizations = Organization::all();
+        return view('events.edit',['event'=>Event::find($id),'organizations'=>$organizations]);
     }
     public function update_event(Request $request)
     {
         // hacer validaciones
         $input = $request->all();
+        
+        /*if(isset($request->main_image)){
+            $imageName = time().'.'.$request->main_image->extension();
+            $request->main_image->move(public_path('images'), $imageName);
+        }*/
+
         $id=$input['id'];
         $event = array(
             'type'=>$input["type"],
@@ -75,15 +100,119 @@ class EventsController extends Controller
             'external_link'=>$input["external_link"],
             'fb_page'=>$input["fb_page"],
             'ig_page'=>$input["ig_page"],
-            'main_image'=>'',
-            'featured_event'=>false,
+            //'main_image'=>$imageName,
+            'featured_event'=>isset($input['featured']) ? true : false,
+            'published'=>isset($input['published']) ? true : false,
             //'results'=>'',
-            'user_id'=>1,
-            //'organizer_id'=>1
+            //'user_id'=>1,
+            'organizer_id'=>$input['organizer']
         );
-        // falta main image, featured event, user creador
+        // falta  user creador
         DB::table('events')->where('id',$id)->update($event);
         return redirect()->route('admin.event', ['id'=>$id]);
         
+    }
+
+    public function delete_event($id){
+        return Event::destroy($id);
+    }
+
+    public function new_category(Request $request)
+    {
+        // hacer validaciones
+        $input = $request->all();
+        $category = Category::create([
+            'name'=>$input['name'],
+            'price'=>$input['price'],
+            'availability'=>$input['availability'],
+            'age_to'=>$input['age_to'],
+            'age_from'=>$input['age_from'],
+            'gender'=>$input['gender'],
+            'event_id'=>$input['event']
+        ]);
+        return redirect()->route('admin.event', ['id'=>$input['event']]);
+
+    }
+    public function update_category(Request $request)
+    {
+        $input = $request->all();
+        $category = Category::where('id',$request->id)->update([
+            'name'=>$input['name'],
+            'price'=>$input['price'],
+            'availability'=>$input['availability'],
+            'age_to'=>$input['age_to'],
+            'age_from'=>$input['age_from'],
+            'gender'=>$input['gender'],
+        ]);
+        $category= Category::find($request->id);
+        return redirect()->route('admin.event', ['id'=>$category->event_id]);
+    }
+    public function delete_category($id){
+        return Category::destroy($id);
+    }
+    public function new_cupon(Request $request)
+    {
+        // hacer validaciones
+        $input = $request->all();
+        $cupon = Cupon::create([
+            'code'=>$input['code'],
+            'discount_amount'=>$input['discount_amount'],
+            'percentage'=>$input['percentage'],
+            'valid_from'=>$input['valid_from'],
+            'valid_to'=>$input['valid_to'],
+            'usage_limit'=>$input['usage_limit'],
+            'event_id'=>$input['event']
+        ]);
+        return redirect()->route('admin.event', ['id'=>$input['event']]);
+        
+    }
+    public function update_cupon(Request $request)
+    {
+        $input = $request->all();
+        $cupon = Cupon::where('id',$request->id)->update([
+            'code'=>$input['code'],
+            'discount_amount'=>$input['discount_amount'],
+            'percentage'=>$input['percentage'],
+            'valid_from'=>$input['valid_from'],
+            'valid_to'=>$input['valid_to'],
+            'usage_limit'=>$input['usage_limit'],
+        ]);
+        $cupon= Cupon::find($request->id);
+        return redirect()->route('admin.event', ['id'=>$cupon->event_id]);
+    }
+    public function delete_cupon($id){
+        return Cupon::destroy($id);
+    }
+    public function new_question(Request $request)
+    {
+        // hacer validaciones
+        $input = $request->all();
+        $question = Question::create([
+            'type'=>$input['type'],
+            'content'=>$input['content'],
+            'required'=>$input['required'],
+            'order'=>$input['order'],
+            'event_id'=>$input['event']
+        ]);
+        return redirect()->route('admin.event', ['id'=>$input['event']]);
+    }
+    public function update_question(Request $request)
+    {
+        $input = $request->all();
+        $question = Question::where('id',$request->id)->update([
+            'type'=>$input['type'],
+            'content'=>$input['content'],
+            'required'=>$input['required'],
+            'order'=>$input['order']
+        ]);
+        $question=Question::find($request->id);
+        return redirect()->route('admin.event', ['id'=>$question->event_id]);
+    }
+    public function delete_question($id){
+        return Question::destroy($id);
+    }
+    public function organizador_events(){
+        $organizer = Organizer::where('user_id', Auth::user()->id)->first();
+        return view('events.index',['events'=>Event::where('organizer_id', $organizer->id)->get()]);
     }
 }
