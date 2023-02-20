@@ -50,8 +50,8 @@
                             <input type="text" class="form-control" name="type"  value="{{$event->type}}" readonly>
                         </div>
                         <div class="form-group col-sm">
-                            <label for="casification">Casification</label>
-                            <input type="text" class="form-control" name="casification"  value="{{$event->clasification}}" readonly>
+                            <label for="casification">Clasification</label>
+                            <input type="text" class="form-control" name="clasification"  @if($event->clasification) value="{{$event->clasification->name}}" @endif readonly>
                         </div>
                         <div class="form-check col-sm">
                             <input type="checkbox" class="form-check-input mt-4" name="featured" @if($event->featured_event) checked @endif disabled>
@@ -125,9 +125,10 @@
                       <thead>
                       <tr>
                         <th>#</th>
-                        <th>Name</th>
+                        <th>Nombre</th>
                         <th>Email</th>
-                        <th>Actions</th>
+                        <th>Categoría</th>
+                        <th>Acciones</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -136,8 +137,9 @@
                               <td>{{$inscripto->user_id}}</td>
                               <td>{{$inscripto->name}}</td>
                               <td>{{$inscripto->email}}</td>
+                              <td>{{$inscripto->categoria}}</td>
                               <td>
-                                <a href="{{ route('admin.event', ['id'=>$inscripto->event_id]) }}"><i class="fas fa-eye ml-1"></i></a>
+                                <a href="{{ route('admin.inscripcion', ['id'=>$inscripto->inscripcion_id]) }}"><i class="fas fa-eye ml-1"></i></a>
                                 <i class="fas fa-trash ml-1"></i>
                               </td>
                           </tr>
@@ -255,7 +257,7 @@
                         @foreach($questions as $question)
                           <tr>
                               <td>{{$question->id}}</td>
-                              <td>@if($question->type==1) Open field @elseif($question->type==1) Yes/No @else Select one option @endif</td>
+                              <td>@if($question->type==1) Open field @elseif($question->type==2) Yes/No @else Select one option @endif</td>
                               <td>{{$question->content}}</td>
                               <td>@if($question->required) Yes @else No @endif</td>
                               <td>{{$question->order}}</td>
@@ -485,5 +487,13 @@
         }
       })
     }
+
+    $('#select-tipo').on('change',function(){
+      if($('#select-tipo').val()==3){
+        $('#acl').show()
+      }else{
+        $('#acl').hide()
+      }
+    })
   </script>
 @endsection

@@ -23,6 +23,7 @@ use App\Http\Controllers\OrganizationsController;
 });*/
 
 Route::get('/', [ParticipanteController::class, 'index'])->name('home');
+Route::get('/events', [ParticipanteController::class, 'events'])->name('participante.events');
 
 
 
@@ -30,8 +31,15 @@ Auth::routes();
 
 // Participante Routes
 Route::middleware(['auth','user-role:participante'])->group(function(){
-    Route::get("/home",[HomeController::class,'userHome'])->name('home');
-
+    Route::get('/home', [ParticipanteController::class, 'index'])->name('home');
+    Route::get('/event-detail/{id}', [ParticipanteController::class, 'event'])->name('participante.event');
+    Route::get('/event-register/{id}', [ParticipanteController::class, 'registration_form'])->name('participante.registration_form');
+    Route::post('/event-register/', [ParticipanteController::class, 'register'])->name('participante.save_register');
+    Route::get('/schedule', [ParticipanteController::class, 'schedule'])->name('participante.schedule');
+    Route::get('/profile/', [ParticipanteController::class, 'profile'])->name('participante.profile');
+    Route::post('/profile/', [ParticipanteController::class, 'update_profile'])->name('participante.save_profile');
+    Route::get('/upcoming', [ParticipanteController::class, 'upcoming'])->name('participante.upcoming');
+    Route::get('/validar-cupon/{cupon}',[ParticipanteController::class, 'validar_cupon'])->name('participante.validar_cupon');
 });
 
 // Organizador Route
@@ -57,6 +65,8 @@ Route::middleware(['auth','user-role:admin,organizador'])->group(function(){
     Route::post('/admin/event/new-question', [EventsController::class, 'new_question'])->name('admin.event.new_question');
     Route::post('/admin/event/update-question', [EventsController::class, 'update_question'])->name('admin.event.update_question');
     Route::get('/admin/event/delete-question/{id}', [EventsController::class, 'delete_question'])->name('admin.event.delete_question');
+    
+    Route::get('/admin/inscripcion/{id}', [EventsController::class, 'inscripcion'])->name('admin.inscripcion');
     
 });
 

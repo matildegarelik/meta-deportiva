@@ -45,7 +45,7 @@
                         <tr>
                             <td>{{$event->id}}</td>
                             <td>{{$event->name}}</td>
-                            <td>{{$event->clasification}}</td>
+                            <td>{{$event->clasification->name}}</td>
                             <td>{{$event->start_date}}</td>
                             <td>{{$event->end_date}}</td>
                             <td>

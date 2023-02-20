@@ -62,8 +62,12 @@
                                 </select>
                             </div>
                             <div class="form-group col-sm">
-                                <label for="casification">Casification</label>
-                                <input type="text" class="form-control" name="casification">
+                                <label for="casification">Clasification</label>
+                                <select class="form-control" name="clasification">
+                                  @foreach($clasifications as $clasification)
+                                  <option value="{{$clasification->id}}">{{$clasification->id}}- {{$clasification->name}}</option>
+                                  @endforeach
+                                </select>
                             </div>
                             <div class="form-check col-sm">
                                 <input type="checkbox" class="form-check-input" name="featured">
@@ -98,7 +102,7 @@
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="name">Description</label>
-                                <textarea class="form-control" rows="5" name="description"></textarea>
+                                <textarea class="form-control ckeditor" rows="10" name="description" id="editor"></textarea>
                             </div> 
                         </div>
                         <div class="row">
@@ -158,5 +162,6 @@
 $('.select2bs4').select2({
     theme: 'bootstrap4'
   })
+$('#editor').ckeditor()
 </script>
 @endsection

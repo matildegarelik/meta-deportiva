@@ -13,6 +13,7 @@ use App\Models\Cupon;
 use App\Models\Question;
 use App\Models\Organization;
 use App\Models\Organizer;
+use App\Models\Clasification;
 
 class EventsController extends Controller
 {
@@ -23,8 +24,9 @@ class EventsController extends Controller
     public function event($id)
     {
         $event_inscriptos = EventInscripto::where('event_id',$id)->get();
-        $inscriptos = DB::table('event_inscriptos')->select(['event_inscriptos.event_id','users.name as name', 'event_inscriptos.user_id', 'users.email as email'])
-            ->join('users','users.id','=','event_inscriptos.user_id')->where('event_id',$id)->get();
+        $inscriptos = DB::table('event_inscriptos')->select(['event_inscriptos.id as inscripcion_id','event_inscriptos.event_id','users.name as name', 'event_inscriptos.user_id', 'users.email as email','categories.name as categoria'])
+        ->join('categories','categories.id','=','event_inscriptos.category_id')    
+        ->join('users','users.id','=','event_inscriptos.user_id')->where('event_inscriptos.event_id',$id)->get();
         $categories = Category::where('event_id',$id)->get();
         $cupons=Cupon::where('event_id',$id)->get();
         $questions=Question::where('event_id',$id)->get();
@@ -33,12 +35,14 @@ class EventsController extends Controller
     public function new_event()
     {
         $organizations = Organization::all();
-        return view('events.create',compact('organizations'));
+        $clasifications = Clasification::all();
+        return view('events.create',compact('organizations','clasifications'));
     }
     public function create_event(Request $request)
     {
         // hacer validaciones
         $input = $request->all();
+        echo $input['organizer'];
 
         $request->validate([
             'main_image' => 'required|image|mimes:png,jpg,jpeg|max:2048'
@@ -49,7 +53,7 @@ class EventsController extends Controller
 
         $event = Event::create([
             'type'=>$input["type"],
-            'clasification'=>$input["casification"],
+            'clasification_id'=>$input["clasification"],
             'name'=>$input["name"],
             'description'=>$input["description"],
             "start_date"=>$input["start_date"],
@@ -67,7 +71,6 @@ class EventsController extends Controller
             'organizer_id'=>$input['organizer']
         ]);
         // falta main image y location
-        //DB::table('events')->insert($event);
         return redirect()->route('admin.events');
         
         
@@ -75,7 +78,8 @@ class EventsController extends Controller
     public function edit_event($id)
     {
         $organizations = Organization::all();
-        return view('events.edit',['event'=>Event::find($id),'organizations'=>$organizations]);
+        $clasifications = Clasification::all();
+        return view('events.edit',['event'=>Event::find($id),'organizations'=>$organizations,'clasifications'=>$clasifications]);
     }
     public function update_event(Request $request)
     {
@@ -90,7 +94,7 @@ class EventsController extends Controller
         $id=$input['id'];
         $event = array(
             'type'=>$input["type"],
-            'clasification'=>$input["casification"],
+            'clasification_id'=>$input["clasification"],
             'name'=>$input["name"],
             'description'=>$input["description"],
             //"start_date"=>$input["start_date"],
@@ -214,5 +218,9 @@ class EventsController extends Controller
     public function organizador_events(){
         $organizer = Organizer::where('user_id', Auth::user()->id)->first();
         return view('events.index',['events'=>Event::where('organizer_id', $organizer->id)->get()]);
+    }
+    public function inscripcion($id)
+    {
+        return view('events.inscripcion',['inscripcion'=>EventInscripto::find($id)]);
     }
 }

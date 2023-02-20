@@ -9,19 +9,23 @@ class Participante extends Model
 {
     public $timestamps=false;
     protected $fillable=[
+        'user_id',
         'name',
         'father_last_name',
         'mother_last_name',
         'date_of_birth',
+        'gender',
+        'phone_number',
+
         'blood_type',
         'allergies',
-        'gender',
         'team',
-        'phone_number',
+
         'profile_picture',
         'ec_name',
         'ec_relationship',
         'ec_phone',
+        
         'street_number',
         'area',
         'city',

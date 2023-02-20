@@ -60,8 +60,12 @@
                                 <input type="text" class="form-control" name="type"  value="{{$event->type}}">
                             </div>
                             <div class="form-group col-sm">
-                                <label for="casification">Casification</label>
-                                <input type="text" class="form-control" name="casification"  value="{{$event->clasification}}">
+                                <label for="casification">Clasification</label>
+                                <select class="form-control" name="clasification">
+                                @foreach($clasifications as $clasification)
+                                  <option value="{{$clasification->id}}" @if($event->clasification_id==$clasification->id) selected @endif>{{$clasification->id}}- {{$clasification->name}}</option>
+                                @endforeach
+                                </select>
                             </div>
                             <div class="form-check col-sm">
                                 <input type="checkbox" class="form-check-input mt-4" name="featured" @if($event->featured_event) checked @endif>
@@ -83,7 +87,7 @@
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="name">Description</label>
-                                <textarea class="form-control" rows="5" name="description">{{$event->description}}</textarea>
+                                <textarea class="form-control" id="editor" rows="5" name="description">{{$event->description}}</textarea>
                             </div> 
                         </div>
                         <div class="row">
@@ -152,5 +156,6 @@
 $('.select2bs4').select2({
     theme: 'bootstrap4'
   })
+$('#editor').ckeditor()
 </script>
 @endsection

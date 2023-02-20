@@ -50,4 +50,8 @@ class User extends Authenticatable
             get: fn($value) => ['participante','organizador','admin'][$value],
         );
     }
+    public function events_inscripto()
+    {
+        return $this->hasMany(EventInscripto::class);
+    }
 }

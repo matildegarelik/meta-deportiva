@@ -49,6 +49,7 @@
 		<!-- Custom styles for this template -->
 		<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" >
 		<link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}" >
+    <style>body, .card-title{font-size:120% !important;}</style>
 	</head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
@@ -439,6 +440,11 @@
         <script src="{{ asset('assets/admin-lte/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
         <script src="{{ asset('assets/admin-lte/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
         <script src="{{ asset('assets/admin-lte/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
+        <!-- CK editor -->
+        <!--<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>-->
+        <script src="{{ asset('../assets/ckeditor/ckeditor.js') }}"></script>
+        <script src="{{ asset('../assets/ckeditor/adapters/jquery.js') }}"></script>
 
         @yield('js')
     </body>

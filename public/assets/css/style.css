@@ -4458,7 +4458,7 @@ body{
 	position:relative;
 	padding:0 0 0 45px;
 	margin:0 0 30px;
-	display:inline-block;
+	display:block;
 	vertical-align:top
 }
 
@@ -4473,7 +4473,7 @@ body{
 	text-align:center;
 	color:#ff6600;
 	font-family: FontAwesome;
-	display: inline-block;
+	display: block;
 	font-size:14px;
 	position:absolute;
 	left:0;
