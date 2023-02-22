@@ -43,7 +43,7 @@
                 <span>${{$event->starter_price()}}</span>
             </li>
             <li>
-                <a href="{{  route('participante.registration_form', $event->id)}}">Register to event</a>
+                <a href="{{  route('participante.registration_form', $event->id)}}">Registrarse</a>
             </li>
         </ul>
     </div>

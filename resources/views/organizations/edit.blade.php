@@ -36,7 +36,7 @@
                         <input type="hidden" name="id" value="{{$organization->id}}">
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="name">Name</label>
+                                <label for="name">Nombre</label>
                                 <input type="text" class="form-control" name="name" value="{{$organization->name}}">
                             </div>
                             <div class="form-group col-sm">
@@ -51,15 +51,15 @@
                         
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="website">Website</label>
+                                <label for="website">Sitio web</label>
                                 <input type="text" class="form-control" name="website" value="{{$organization->website}}">
                             </div>
                             <div class="form-group col-sm">
-                                <label for="fb_page">Facebook page</label>
+                                <label for="fb_page">Página de Facebook</label>
                                 <input type="text" class="form-control" name="fb_page" value="{{$organization->fb_page}}">
                             </div>
                             <div class="form-group col-sm">
-                                <label for="ig_page">Instagram page</label>
+                                <label for="ig_page">Página de Instagram</label>
                                 <input type="text" class="form-control" name="ig_page" value="{{$organization->ig_page}}">
                             </div>
                         </div>

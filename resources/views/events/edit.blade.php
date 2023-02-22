@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('pagetitle','Event details')
+@section('pagetitle','Editar evento')
 
 @section('content')
 <!-- Content Header (Page header) -->
@@ -14,7 +14,7 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{route('home.admin')}}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{route('admin.events')}}">Events</a></li>
+            <li class="breadcrumb-item"><a href="{{route('admin.events')}}">Eventos</a></li>
             <li class="breadcrumb-item active">{{$event->id}}</li>
           </ol>
         </div><!-- /.col -->
@@ -36,13 +36,13 @@
                         <input type="hidden" name="id" value="{{$event->id}}">
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="name">Name</label>
+                                <label for="name">Nombre</label>
                                 <input type="text" class="form-control" name="name" value="{{$event->name}}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="name">Organizer</label>
+                                <label for="name">Organizador</label>
                                 <select class="form-control select2bs4" name="organizer">
                                     @foreach($organizations as $organization)
                                     <optgroup label="{{$organization->name}}">
@@ -56,11 +56,11 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="type">Type</label>
+                                <label for="type">Tipo</label>
                                 <input type="text" class="form-control" name="type"  value="{{$event->type}}">
                             </div>
                             <div class="form-group col-sm">
-                                <label for="casification">Clasification</label>
+                                <label for="casification">Clasificación</label>
                                 <select class="form-control" name="clasification">
                                 @foreach($clasifications as $clasification)
                                   <option value="{{$clasification->id}}" @if($event->clasification_id==$clasification->id) selected @endif>{{$clasification->id}}- {{$clasification->name}}</option>
@@ -76,27 +76,27 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="start_date">Start date</label>
+                                <label for="start_date">Fecha inicio</label>
                                 <input type="text" class="form-control" name="start_date"  value="{{$event->start_date}}">
                             </div>
                             <div class="form-group col-sm">
-                                <label for="end_date">End date</label>
+                                <label for="end_date">Fecha fin</label>
                                 <input type="text" class="form-control" name="end_date"  value="{{$event->end_date}}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="name">Description</label>
+                                <label for="name">Descripción</label>
                                 <textarea class="form-control" id="editor" rows="5" name="description">{{$event->description}}</textarea>
                             </div> 
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="location">Location</label>
+                                <label for="location">Ubicación</label>
                                 <input type="text" class="form-control" name="location"  value="{{$event->location}}">
                             </div>
                             <div class="form-group col-sm">
-                                <label for="main_image">Main image</label>
+                                <label for="main_image">Imagen principal</label>
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" name="main_image">
@@ -110,21 +110,21 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="website">Website</label>
+                                <label for="website">Sitio web</label>
                                 <input type="text" class="form-control" name="website"  value="{{$event->website}}">
                             </div>
                             <div class="form-group col-sm">
-                                <label for="type">External link</label>
+                                <label for="type">Link externo</label>
                                 <input type="text" class="form-control" name="external_link"  value="{{$event->external_link}}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="fb_page">Facebook page</label>
+                                <label for="fb_page">Página de Facebook</label>
                                 <input type="text" class="form-control" name="fb_page"  value="{{$event->fb_page}}">
                             </div>
                             <div class="form-group col-sm">
-                                <label for="ig_page">Instagram page</label>
+                                <label for="ig_page">Página de Instagram</label>
                                 <input type="text" class="form-control" name="ig_page"  value="{{$event->ig_page}}">
                             </div>
                         </div>
@@ -157,5 +157,10 @@ $('.select2bs4').select2({
     theme: 'bootstrap4'
   })
 $('#editor').ckeditor()
+
+const urlParams = new URLSearchParams(window.location.search);
+if(urlParams.get('msg') && urlParams.get('msg')!='')
+    toastr.error(urlParams.get('msg'))
 </script>
+
 @endsection

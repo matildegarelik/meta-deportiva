@@ -21,26 +21,7 @@
                     <input type="text" class="form-control hasclear" placeholder="Search">
                     <span class="clearer"><img src="images/clear.png" alt="clear"></span>
                 </div>
-                <div class="location col-sm-6 col-md-3">
-                    <label>Location</label>
-                    <select class="selectpicker dropdown">
-                      <option>Select Location</option>
-                      <option>San Francisco</option>
-                      <option>Foxborough </option>
-                      <option>Buffalo</option>
-                      <option>Auburn Hills</option>
-                    </select>
-                </div>
-                <div class="event-date col-sm-6 col-md-3">
-                    <label>Event Date</label>
-                    <select class="selectpicker dropdown">
-                      <option>Select Date</option>
-                      <option>August 1st, 2016</option>
-                      <option>August 2nd, 2016</option>
-                      <option>August 3rd, 2016</option>
-                      <option>August 4th, 2016</option>
-                    </select>
-                </div>
+                
                 <div class="col-sm-6 col-md-2">
                     <input type="submit" value="Search">
                 </div>
@@ -57,27 +38,6 @@
                     <div class="search-event-title">
                         <h2><span>Próximos</span> Eventos </h2>
                     </div>
-                    <!--<div class="search-filter-delivery">
-                        <h3>Delivery</h3>
-                        <div class="checkbox">
-                            <input id="delivery1" class="styled" type="checkbox" checked="">
-                            <label for="delivery1">
-                                All
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <input id="delivery2" class="styled" type="checkbox">
-                            <label for="delivery2">
-                                Electronic
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <input id="delivery3" class="styled" type="checkbox">
-                            <label for="delivery3">
-                                Instant
-                            </label>
-                        </div>
-                    </div>-->
                     <div class="search-filter-category">
                         <h3>Clasificaciones</h3>
                         <div class="checkbox">
@@ -94,43 +54,6 @@
                             </label>
                         </div>
                         @endforeach
-                    </div>
-                    <!--<div class="search-filter-seat-features">
-                        <h3>Seat Features</h3>
-                        <div class="checkbox">
-                            <input id="features1" class="styled" type="checkbox" checked="">
-                            <label for="features1">
-                                All
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <input id="features2" class="styled" type="checkbox">
-                            <label for="features2">
-                                Aisle
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <input id="features3" class="styled" type="checkbox">
-                            <label for="features3">
-                                Ex-Obstucted View
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <input id="features4" class="styled" type="checkbox">
-                            <label for="features4">
-                                Parking Pass Included
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <input id="features5" class="styled" type="checkbox">
-                            <label for="features5">
-                                Wheelchair Accessible
-                            </label>
-                        </div>
-                    </div>-->
-                    <div class="search-filter-price">
-                        <h3>Price</h3>
-                        <input id="price-range" type="text" class="span2" value="" data-slider-min="10" data-slider-max="200" data-slider-step="5" data-slider-value="[50,150]"/>
                     </div>
                 </div>
             </div>
@@ -177,7 +100,7 @@
                         <div class="search-result-item-price col-sm-3">
                             <span>Price From</span>
                             <strong>${{$event->starter_price()}}</strong>
-                            <a href="{{ route('participante.event',$event->id) }}">Register Now</a>
+                            <a href="{{ route('participante.event',$event->id) }}">Ver más</a>
                         </div>
                     </div>
                 </div>

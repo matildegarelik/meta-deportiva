@@ -85,13 +85,19 @@ class EventsController extends Controller
     {
         // hacer validaciones
         $input = $request->all();
-        
+        $id=$input['id'];
         /*if(isset($request->main_image)){
             $imageName = time().'.'.$request->main_image->extension();
             $request->main_image->move(public_path('images'), $imageName);
         }*/
+        if(isset($input['published'])){
+            $ev = Event::find($id);
+            if(!count($ev->categories)){
+                return redirect()->route('admin.event.edit', ['id'=>$id,'msg'=>'No puede publicarse un evento sin al menos una categoría existente']);
+            }
+        }
 
-        $id=$input['id'];
+        
         $event = array(
             'type'=>$input["type"],
             'clasification_id'=>$input["clasification"],

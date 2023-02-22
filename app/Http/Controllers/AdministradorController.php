@@ -16,7 +16,7 @@ class AdministradorController extends Controller
     public function index()
     {
         $total_events = count(Event::all());
-        $total_participantes = count(User::all()->where('role_id',1));
+        $total_participantes = count(User::where('role',1)->get());
         $total_org = count(Organization::all());
         return view('administrador.index', compact('total_events', 'total_participantes','total_org'));
     }

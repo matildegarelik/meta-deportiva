@@ -31,6 +31,7 @@
 
         <!-- SweetAlert2 -->
         <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/toastr/toastr.min.css') }}">
 
         <!-- iCheck -->
         <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
@@ -289,7 +290,7 @@
                     <a href="#" class="nav-link {{  str_contains(Request::segment(2),'event') ? 'active' : '' }}">
                       <i class="nav-icon fas fa-calendar-alt"></i>
                       <p>
-                        Events
+                        Eventos
                         <i class="right fas fa-angle-left"></i>
                       </p>
                     </a>
@@ -318,7 +319,7 @@
                     <a href="#" class="nav-link {{  str_contains(Request::segment(2),'organiza') ? 'active' : '' }}">
                       <i class="nav-icon far fa-building"></i>
                       <p>
-                        Organizations
+                        Organizaciones
                         <i class="right fas fa-angle-left"></i>
                       </p>
                     </a>
@@ -355,7 +356,7 @@
                   <li class="nav-item">
                     <a href="{{route('organizador.events')}}" class="nav-link {{ str_contains(Request::segment(2),'event') ? 'active' : '' }}">
                       <i class="nav-icon fas fa-calendar-alt"></i>
-                      <p>My Events</p>
+                      <p>Mis eventos</p>
                     </a>
                     
                   </li>
@@ -443,6 +444,8 @@
 
         <!-- CK editor -->
         <!--<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>-->
+
+        <script src="{{ asset('assets/admin-lte/plugins/toastr/toastr.min.js')}}"></script>
         <script src="{{ asset('../assets/ckeditor/ckeditor.js') }}"></script>
         <script src="{{ asset('../assets/ckeditor/adapters/jquery.js') }}"></script>
 

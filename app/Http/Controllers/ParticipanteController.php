@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\EventInscripto;
 use App\Models\Participante;
 use App\Models\Cupon;
+use App\Models\User;
 use App\Models\Answer;
 
 use Illuminate\Http\Request;
@@ -22,7 +23,11 @@ class ParticipanteController extends Controller
     public function index()
     {
         $clasifications = Clasification::all();
-        return view('participante.index', compact('clasifications'));
+        $featured_events = Event::where('featured_event',1)->where('published',1)->get();
+        $events_active = Event::where('published',1)/*->whereDate('start_date', '>', now())*/->count();
+        $users_active = User::where('role',1)->count();
+        $total_register = EventInscripto::all()->count();
+        return view('participante.index', compact('clasifications','featured_events','events_active','users_active','total_register'));
     }
     
     public function events(Request $request)
@@ -36,7 +41,7 @@ class ParticipanteController extends Controller
             $events = $events->where('clasification_id', '=', intval($request->clasification));
         }
         $clasifications=Clasification::all();
-        $events=$events->paginate(2);
+        $events=$events->paginate(10);
         return view('participante.events',compact('events','clasifications'));
     }
     public function event($id)
@@ -93,7 +98,8 @@ class ParticipanteController extends Controller
     public function schedule()
     {
         $events = Event::all();
-        return view('participante.schedule',compact('events'));
+        $events_inscripto = Auth::user()->events_inscripto()->paginate(5);
+        return view('participante.schedule',compact('events','events_inscripto'));
     }
     public function profile()
     {

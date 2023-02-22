@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('pagetitle','Event details')
+@section('pagetitle','Detalles evento')
 
 @section('content')
 <!-- Content Header (Page header) -->
@@ -14,7 +14,7 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{route('home.admin')}}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{route('admin.events')}}">Events</a></li>
+            <li class="breadcrumb-item"><a href="{{route('admin.events')}}">Eventos</a></li>
             <li class="breadcrumb-item active">{{$event->id}}</li>
           </ol>
         </div><!-- /.col -->
@@ -34,7 +34,7 @@
                 <div class="card-body px-3">
                     <div class="row">
                         <div class="form-group col-sm">
-                            <label for="name">Name</label>
+                            <label for="name">Nombre</label>
                             <input type="text" class="form-control" name="name" value="{{$event->name}}" readonly>
                         </div>
                     </div>
@@ -46,11 +46,11 @@
                   </div>
                     <div class="row">
                         <div class="form-group col-sm">
-                            <label for="type">Type</label>
+                            <label for="type">Tipo</label>
                             <input type="text" class="form-control" name="type"  value="{{$event->type}}" readonly>
                         </div>
                         <div class="form-group col-sm">
-                            <label for="casification">Clasification</label>
+                            <label for="casification">Clasificación</label>
                             <input type="text" class="form-control" name="clasification"  @if($event->clasification) value="{{$event->clasification->name}}" @endif readonly>
                         </div>
                         <div class="form-check col-sm">
@@ -63,47 +63,47 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-sm">
-                            <label for="start_date">Start date</label>
+                            <label for="start_date">Fecha inicio</label>
                             <input type="text" class="form-control" name="start_date"  value="{{$event->start_date}}" readonly>
                         </div>
                         <div class="form-group col-sm">
-                            <label for="end_date">End date</label>
+                            <label for="end_date">Fecha fin</label>
                             <input type="text" class="form-control" name="end_date"  value="{{$event->end_date}}" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-sm">
-                            <label for="name">Description</label>
+                            <label for="name">Descripción</label>
                             <textarea class="form-control" rows="5" name="description" readonly>{{$event->description}}</textarea>
                         </div> 
                     </div>
                     <div class="row">
                         <div class="form-group col-sm">
-                            <label for="location">Location</label>
+                            <label for="location">Ubicación</label>
                             <input type="text" class="form-control" name="location"  value="{{$event->location}}" readonly>
                         </div>
                         <div class="form-group col-sm">
-                            <label for="main_image">Main image</label>
+                            <label for="main_image">Imagen principal</label>
                             <p><img src="{{ asset('images/'.$event->main_image) }}" style="max-height: 70px;"></p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-sm">
-                            <label for="website">Website</label>
+                            <label for="website">Sitio web</label>
                             <input type="text" class="form-control" name="website"  value="{{$event->website}}" readonly>
                         </div>
                         <div class="form-group col-sm">
-                            <label for="type">External link</label>
+                            <label for="type">Link externo</label>
                             <input type="text" class="form-control" name="external_link"  value="{{$event->external_link}}" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-sm">
-                            <label for="fb_page">Facebook page</label>
+                            <label for="fb_page">Página de Facebook</label>
                             <input type="text" class="form-control" name="fb_page"  value="{{$event->fb_page}}" readonly>
                         </div>
                         <div class="form-group col-sm">
-                            <label for="ig_page">Instagram page</label>
+                            <label for="ig_page">Página de Instagram</label>
                             <input type="text" class="form-control" name="ig_page"  value="{{$event->ig_page}}" readonly>
                         </div>
                     </div>
@@ -164,10 +164,10 @@
                       <thead>
                       <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Availability</th>
-                        <th>Actions</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Capacidad</th>
+                        <th>Acciones</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -203,12 +203,12 @@
                       <thead>
                       <tr>
                         <th>#</th>
-                        <th>Code</th>
-                        <th>Discount amount</th>
-                        <th>Percentage</th>
-                        <th>Valid</th>
-                        <th>Usage limit</th>
-                        <th>Actions</th>
+                        <th>Código</th>
+                        <th>Descuento</th>
+                        <th>Porcentaje</th>
+                        <th>Validez</th>
+                        <th>Límite de uso</th>
+                        <th>Acciones</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -246,11 +246,11 @@
                       <thead>
                       <tr>
                         <th>#</th>
-                        <th>Type</th>
-                        <th>Content</th>
-                        <th>Required</th>
-                        <th>Order</th>
-                        <th>Actions</th>
+                        <th>Tipo</th>
+                        <th>Contenido</th>
+                        <th>Requerida</th>
+                        <th>Orden</th>
+                        <th>Acciones</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -357,13 +357,13 @@
     });
     function deleteCategory(id){
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Estás seguro?',
+        text: "Esto no se va a poder revertir!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Sí, borrar!'
       }).then((result) => {
         if (result.isConfirmed) {
           var url = '{{ route("admin.event.delete_category", ":id") }}';
@@ -374,16 +374,16 @@
 
           }).done((response)=>{
             Swal.fire(
-                'Deleted!',
-                'Your category has been deleted.',
+                'Eliminada!',
+                'La categoría fue eliminada.',
                 'success'
               ).then(()=>{
                 document.location.reload(true)
               })
           }).fail((response)=>{
             Swal.fire(
-                'Not deleted!',
-                'Your category was not deleted.',
+                'No eliminada!',
+                'Tu categoría no fue eliminada.',
                 'warning'
               )
           })
@@ -406,13 +406,13 @@
     });
     function deleteCupon(id){
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Estás seguro?',
+        text: "No vas a poder deshacer esto!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Sí, borrar!'
       }).then((result) => {
         if (result.isConfirmed) {
           var url = '{{ route("admin.event.delete_cupon", ":id") }}';
@@ -423,16 +423,16 @@
 
           }).done((response)=>{
             Swal.fire(
-                'Deleted!',
-                'Your cupon has been deleted.',
+                'Eliminado!',
+                'Su cupón fue eliminado.',
                 'success'
               ).then(()=>{
                 document.location.reload(true)
               })
           }).fail((response)=>{
             Swal.fire(
-                'Not deleted!',
-                'Your cupon was not deleted.',
+                'No eliminado!',
+                'Su cupón no fue eliminado.',
                 'warning'
               )
           })
@@ -453,13 +453,13 @@
     });
     function deleteQuestion(id){
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Estás seguro?',
+        text: "Esto no va a poder deshacerse!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Sí, borrar!'
       }).then((result) => {
         if (result.isConfirmed) {
           var url = '{{ route("admin.event.delete_question", ":id") }}';
@@ -470,16 +470,16 @@
 
           }).done((response)=>{
             Swal.fire(
-                'Deleted!',
-                'Your question has been deleted.',
+                'Eliminado!',
+                'Su pregunta fue eliminada.',
                 'success'
               ).then(()=>{
                 document.location.reload(true)
               })
           }).fail((response)=>{
             Swal.fire(
-                'Not deleted!',
-                'Your question was not deleted.',
+                'No eliminada!',
+                'Su pregunta no fue eliminada.',
                 'warning'
               )
           })

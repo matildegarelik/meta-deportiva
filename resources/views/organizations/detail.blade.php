@@ -109,10 +109,10 @@
                       <thead>
                       <tr>
                         <th>#</th>
-                        <th>Name</th>
+                        <th>Nombre</th>
                         <th>Tipo</th>
                         <th>Organizador</th>
-                        <th>Actions</th>
+                        <th>Accciones</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -168,7 +168,18 @@
         "info": true,
         "autoWidth": false,
         "responsive": true,
-        "buttons": ["copy", "excel", "pdf", "print"]
+        "buttons": ["copy", "excel", "pdf", "print"],
+        "language": {
+            "lengthMenu": "Display _MENU_ registros por página",
+            "zeroRecords": "No se hallaron datos - Disculpa",
+            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrados de _MAX_ registros totales)",
+            "paginate": {
+              "previous": "Previa",
+              "next": "Próxima"
+            }
+        }
       }).buttons().container().appendTo('#organizadores-table_wrapper .col-md-6:eq(0)');
     })
 

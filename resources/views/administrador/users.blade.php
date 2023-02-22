@@ -33,10 +33,10 @@
                     <thead>
                     <tr>
                       <th>#</th>
-                      <th>Name</th>
+                      <th>Nombre</th>
                       <th>Email</th>
-                      <th>Role</th>
-                      <th>Register date</th>
+                      <th>Rol</th>
+                      <th>Fecha de registro</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -54,10 +54,10 @@
                     <tfoot>
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
+                            <th>Nombre</th>
                             <th>Email</th>
-                            <th>Role</th>
-                            <th>Register date</th>
+                            <th>Rol</th>
+                            <th>Fecha de registro</th>
                         </tr>
                     </tfoot>
                   </table>

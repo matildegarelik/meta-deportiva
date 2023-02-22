@@ -13,8 +13,8 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{route('home.admin')}}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{route('admin.organizations')}}">Organizations</a></li>
-            <li class="breadcrumb-item active">Create</li>
+            <li class="breadcrumb-item"><a href="{{route('admin.organizations')}}">Organizaciones</a></li>
+            <li class="breadcrumb-item active">Crear</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -34,29 +34,29 @@
                         @csrf
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="name">Name</label>
+                                <label for="name">Nombre</label>
                                 <input type="text" class="form-control" name="org_name">
                             </div>
                         </div>
                         
                         <div class="row">
                             <div class="form-group col-sm">
-                                <label for="website">Website</label>
+                                <label for="website">Sitio web</label>
                                 <input type="text" class="form-control" name="website">
                             </div>
                             <div class="form-group col-sm">
-                                <label for="fb_page">Facebook page</label>
+                                <label for="fb_page">Página de Facebook</label>
                                 <input type="text" class="form-control" name="fb_page">
                             </div>
                             <div class="form-group col-sm">
-                                <label for="ig_page">Instagram page</label>
+                                <label for="ig_page">Página de Instagram</label>
                                 <input type="text" class="form-control" name="ig_page">
                             </div>
                         </div>
                         <h4 class=" card-title mt-4 mb-2">Contacto principal</h4>
                         <hr>
                         <div class="input-group mb-3">
-                          <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Full name" required autocomplete="name" autofocus>
+                          <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Nombre completo" required autocomplete="name" autofocus>
                           <div class="input-group-append">
                               <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -84,7 +84,7 @@
                       </div>
           
                       <div class="input-group mb-3">
-                          <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Password" required autocomplete="new-password">
+                          <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Contraseña" required autocomplete="new-password">
                           <div class="input-group-append">
                               <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -98,7 +98,7 @@
                       </div>
           
                       <div class="input-group mb-3">
-                          <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password" placeholder="Retype password">
+                          <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password" placeholder="Confirmar contraseña">
                           <div class="input-group-append">
                               <div class="input-group-text">
                                 <span class="fas fa-lock"></span>

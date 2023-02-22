@@ -13,7 +13,7 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{route('home.admin')}}">Home</a></li>
-            <li class="breadcrumb-item active">Organizations</li>
+            <li class="breadcrumb-item active">Organizaciones</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -33,10 +33,10 @@
                     <thead>
                     <tr>
                       <th>#</th>
-                      <th>Name</th>
-                      <th>Website</th>
+                      <th>Nombre</th>
+                      <th>Sitio web</th>
                       <th>Contacto principal</th>
-                      <th>Actions</th>
+                      <th>Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -58,10 +58,10 @@
                     <tfoot>
                         <tr>
                           <th>#</th>
-                          <th>Name</th>
-                          <th>Website</th>
-                          <th>ID contacto principal</th>
-                          <th>Actions</th>
+                          <th>Nombre</th>
+                          <th>Sitio web</th>
+                          <th>Contacto principal</th>
+                          <th>Acciones</th>
                         </tr>
                     </tfoot>
                   </table>
@@ -96,13 +96,24 @@
         "info": true,
         "autoWidth": false,
         "responsive": true,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "language": {
+            "lengthMenu": "Display _MENU_ registros por página",
+            "zeroRecords": "No se hallaron datos - Disculpa",
+            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrados de _MAX_ registros totales)",
+            "paginate": {
+              "previous": "Previa",
+              "next": "Próxima"
+            }
+        }
       }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
     });
     function deleteOrganization(id){
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this! All organizers will be deleted too.",
+        title: 'Estás seguro?',
+        text: "Esta acción no podrá deshacerse! Todos los organizadores serán eliminados también.",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -118,8 +129,8 @@
 
           }).done((response)=>{
             Swal.fire(
-                'Deleted!',
-                'Your organization has been deleted.',
+                'Eliminada!',
+                'La organización fue eliminada.',
                 'success'
               ).then(()=>{
                 document.location.reload(true)
@@ -128,8 +139,8 @@
             
           }).fail((response)=>{
             Swal.fire(
-                'Not deleted!',
-                'Your organization could not have been deleted.',
+                'No eliminada!',
+                'La organización no ha sido eliminada.',
                 'warning'
               )
           })

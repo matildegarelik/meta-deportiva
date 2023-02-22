@@ -42,7 +42,7 @@
                             <option value="1">SI</option>
                         </select>
                     </div>
-                    <label for="order" class="col-sm-2 col-form-label">Order</label>
+                    <label for="order" class="col-sm-2 col-form-label">Orden</label>
                     <div class="col-sm-4">
                       <input type="number" step="1" class="form-control @error('order') is-invalid @enderror" name="order" placeholder="Order">
                     </div>
@@ -55,8 +55,8 @@
         
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
             </div>
         </form>
         </div>

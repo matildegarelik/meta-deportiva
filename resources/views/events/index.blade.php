@@ -13,7 +13,7 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{route('home.admin')}}">Home</a></li>
-            <li class="breadcrumb-item active">Events</li>
+            <li class="breadcrumb-item active">Eventos</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -33,11 +33,11 @@
                     <thead>
                     <tr>
                       <th>#</th>
-                      <th>Name</th>
-                      <th>Clasification</th>
-                      <th>Start date</th>
-                      <th>End date</th>
-                      <th>Actions</th>
+                      <th>Nombre</th>
+                      <th>Clasificación</th>
+                      <th>Fecha inicio</th>
+                      <th>Fecha fin</th>
+                      <th>Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -59,12 +59,12 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Clasification</th>
-                            <th>Start date</th>
-                            <th>End date</th>
-                            <th>Actions</th>
+                          <th>#</th>
+                          <th>Nombre</th>
+                          <th>Clasificación</th>
+                          <th>Fecha inicio</th>
+                          <th>Fecha fin</th>
+                          <th>Acciones</th>
                         </tr>
                     </tfoot>
                   </table>
@@ -99,19 +99,30 @@
         "info": true,
         "autoWidth": false,
         "responsive": true,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
+        "language": {
+            "lengthMenu": "Display _MENU_ registros por página",
+            "zeroRecords": "No se hallaron datos - Disculpa",
+            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay registros disponibles",
+            "infoFiltered": "(filtrados de _MAX_ registros totales)",
+            "paginate": {
+              "previous": "Previa",
+              "next": "Próxima"
+            }
+        }
       }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
     });
 
     function deleteEvent(id){
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Estás seguro?',
+        text: "No vas a poder revertir esto!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Sí, borrar!'
       }).then((result) => {
         if (result.isConfirmed) {
           var url = '{{ route("admin.event.delete", ":id") }}';
@@ -122,8 +133,8 @@
 
           }).done((response)=>{
             Swal.fire(
-                'Deleted!',
-                'Your event has been deleted.',
+                'Borrado!',
+                'Su evento ha sido eliminado.',
                 'success'
               ).then(()=>{
                 document.location.reload(true)
@@ -132,8 +143,8 @@
             
           }).fail((response)=>{
             Swal.fire(
-                'Not deleted!',
-                'Your event could not have been deleted.',
+                'No eliminado!',
+                'Su evento no pudo ser eliminado.',
                 'warning'
               )
           })

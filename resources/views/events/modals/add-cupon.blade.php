@@ -13,7 +13,7 @@
                 <input type="hidden" name="event" value="{{$id}}"/>
 
                 <div class="form-group row">
-                    <label for="code" class="col-sm-2 col-form-label">Code</label>
+                    <label for="code" class="col-sm-2 col-form-label">Código</label>
                     <div class="col-sm-10">
                       <input type="text" class="form-control @error('code') is-invalid @enderror" name="code" placeholder="Code" >
                     </div>
@@ -25,11 +25,11 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="discount_amount" class="col-sm-2 col-form-label">Discount amount</label>
+                    <label for="discount_amount" class="col-sm-2 col-form-label">Descuento</label>
                     <div class="col-sm-4">
                       <input type="number" step="0.01" class="form-control @error('discount_amount') is-invalid @enderror" name="discount_amount" placeholder="discount">
                     </div>
-                    <label for="percentage" class="col-sm-2 col-form-label">Percentage</label>
+                    <label for="percentage" class="col-sm-2 col-form-label">Porcentaje</label>
                     <div class="col-sm-4">
                       <input type="number" step="1" class="form-control @error('percentage') is-invalid @enderror" name="percentage" placeholder="percentage">
                     </div>
@@ -41,11 +41,11 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="valid_from" class="col-sm-2 col-form-label">Valid from</label>
+                    <label for="valid_from" class="col-sm-2 col-form-label">Válido desde</label>
                     <div class="col-sm-4">
                       <input type="date" class="form-control @error('valid_from') is-invalid @enderror" name="valid_from">
                     </div>
-                    <label for="valid_to" class="col-sm-2 col-form-label">Valid to</label>
+                    <label for="valid_to" class="col-sm-2 col-form-label">Válido hasta</label>
                     <div class="col-sm-4">
                       <input type="date" class="form-control @error('valid_to') is-invalid @enderror" name="valid_to">
                     </div>
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="usage_limit" class="col-sm-2 col-form-label">Usage limit</label>
+                    <label for="usage_limit" class="col-sm-2 col-form-label">Límite de uso</label>
                     <div class="col-sm-10">
                       <input type="number" step="1" class="form-control @error('usage_limit') is-invalid @enderror" name="usage_limit" placeholder="Limit">
                     </div>
@@ -70,8 +70,8 @@
         
             </div>
             <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary">Guardar cambios</button>
             </div>
         </form>
         </div>
