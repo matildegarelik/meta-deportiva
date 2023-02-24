@@ -14,7 +14,7 @@
                 <div class="form-group row">
                     <label for="type" class="col-sm-2 col-form-label">Tipo</label>
                     <div class="col-sm-10">
-                      <select name="type" class="form-control">
+                      <select name="type" class="form-control" id="tipo-edit">
                         <option value="1">OPEN FIELD</option>
                         <option value="2">YES/NO</option>
                         <option value="3">SELECT ONE OPTION</option>
@@ -28,6 +28,20 @@
                       <input type="text" class="form-control @error('content') is-invalid @enderror" name="content" placeholder="Content" >
                     </div>
                     @error('content')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+
+                <div class="form-group row" style="display:none" id="options-edit">
+                    <label for="options" class="col-sm-2 col-form-label">Opciones</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control @error('options') is-invalid @enderror" name="options" placeholder="Opcion 1, opcion2, ..." >
+                      <span class="text-muted">*Ingresar opciones separadas por una coma</span>
+                    </div>
+                   
+                    @error('options')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

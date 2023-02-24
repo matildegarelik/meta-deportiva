@@ -264,7 +264,7 @@ function registrar(){
     if(selected_cat){
         $('#form-registro').submit()
     }else{
-        toastr.warning('Seleccionar categoría')
+        toastr.warning('Seleccionar modalidad')
     }
     // chequear si estan respondidas las preguntas obligatorias y todos los datos personales
 }

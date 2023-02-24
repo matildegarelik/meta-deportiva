@@ -27,6 +27,17 @@ hr{
 .col-form-label{
     text-align: right;
 }
+.profile-picture{
+    text-align: center;
+    margin-bottom:20px;
+    
+    
+}
+.profile-picture img{
+    border-radius:75px;
+    height: 150px;
+    width: 150px;
+}
 </style>
 @endsection
 
@@ -48,12 +59,27 @@ hr{
 
 <section class="section-page-content">
     <div class="container">
-        <div class="row">            
+        <div class="row">
+            <div class="profile-picture">
+                @if($participante->profile_picture)
+                    <img src="{{asset('images/usuarios/'.$participante->profile_picture)}}">
+                @elseif($participante->gender=='2')
+                    <img src="{{asset('assets/admin-lte/dist/img/avatar3.png')}}" />
+                @else
+                    <img src="{{asset('assets/admin-lte/dist/img/avatar5.png')}}" />
+                @endif
+            </div>            
             <div class="ticket-price">
                 <div class="tickets">
-                    <form method="POST" action="{{route('participante.save_profile')}}">
+                    <form method="POST" action="{{route('participante.save_profile')}}" enctype="multipart/form-data">
                         @csrf
                         <button type="submit" class="btn btn-block btn-success">Actualizar</button><hr>
+                        <div class="form-group row">
+                            <label class="col-md-1 col-form-label">Foto de perfil</label>
+                            <div class="col-md-2">
+                                <input type="file" name="profile_picture" /> 
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label class="col-sm-1 col-form-label">Nombre</label>
                             <div class="col-sm-5">

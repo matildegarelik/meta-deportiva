@@ -15,15 +15,15 @@
 <section class="section-refine-search">
     <div class="container">
         <div class="row">
-            <form>
+            <form id="search-form">
                 <div class="keyword col-sm-6 col-md-4">
-                    <label>Search Keyword</label>
-                    <input type="text" class="form-control hasclear" placeholder="Search">
-                    <span class="clearer"><img src="images/clear.png" alt="clear"></span>
+                    <label>Buscar por palabra clave</label>
+                    <input type="text" class="form-control hasclear" placeholder="Buscar" id="search-val">
+                    <span class="clearer"><img src="{{asset('assets/images/clear.png')}}" alt="clear"></span>
                 </div>
                 
                 <div class="col-sm-6 col-md-2">
-                    <input type="submit" value="Search">
+                    <input type="submit" value="Buscar">
                 </div>
             </form>
         </div>
@@ -141,11 +141,24 @@ $(document).ready(()=>{
         $('input[type=checkbox]').prop('checked', false);
         $(this).prop('checked', true);
         if((params.clasification && params.clasification!=$(this).data('id')) || params.clasification==null)
-            window.location.href='?clasification='+$(this).data('id');
+            window.location.href='?clasification='+$(this).data('id')+'&search='+encodeURI($('#search-val').val());
     });
     if(params.clasification){
         $('#category'+params.clasification).prop('checked', true).trigger('change');
     }
+    if(params.search && params.search!=null){
+        $('#search-val').val(params.search)
+    }
+    $('#search-form').on('submit', function(e){
+        e.preventDefault()
+        let searchVal = encodeURI($('#search-val').val())
+        //console.log(searchVal)
+        if(params.clasification){
+            window.location.href='?clasification='+params.clasification+'&search='+searchVal
+        }else{
+            window.location.href='?search='+searchVal
+        }
+    })
 })
 </script>
 @endsection

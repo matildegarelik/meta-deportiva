@@ -11,7 +11,7 @@
                 <h1 class="hero-title">Make Your Dream Come True</h1>
                 <p class="hero-caption">Meet your favorite artists, sport teams and parties</p>
                 <div class="hero-search">
-                    <input type="text" placeholder="Seach Artist, Team, or Venue">
+                    <input type="text" placeholder="Seach Artist, Team, or Venue" id="search-input">
                 </div>
                 <div class="hero-location">
                     <p><i class="fa fa-map-marker" aria-hidden="true"></i> San Francisco <a href="#">Change Location</a></p>
@@ -41,7 +41,7 @@
                             </a>
                         </div>
                         <a href="#">
-                            <img src="{{ asset('assets/images/upcoming-event-1.jpg') }}" alt="image">
+                            <img src="{{ asset('images/eventos/'.$event->main_image) }}" alt="image">
                         </a>
                         <div class="info">
                             <p>{{$event->name}}<span>{{$event->location}}</span></p>
@@ -154,4 +154,14 @@
 </section>
 
 
+@endsection
+
+@section('js')
+<script>
+    $('#search-input').on('click',function(){
+        let searchStr = encodeURI($(this).val())
+        if(searchStr.trim()!='')
+            window.location.href="{{route('participante.events')}}?search="+searchStr
+    })
+</script>
 @endsection

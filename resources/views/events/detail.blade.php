@@ -84,7 +84,7 @@
                         </div>
                         <div class="form-group col-sm">
                             <label for="main_image">Imagen principal</label>
-                            <p><img src="{{ asset('images/'.$event->main_image) }}" style="max-height: 70px;"></p>
+                            <p><img src="{{ asset('images/eventos/'.$event->main_image) }}" style="max-height: 70px;"></p>
                         </div>
                     </div>
                     <div class="row">
@@ -127,7 +127,7 @@
                         <th>#</th>
                         <th>Nombre</th>
                         <th>Email</th>
-                        <th>Categoría</th>
+                        <th>Modalidad</th>
                         <th>Acciones</th>
                       </tr>
                       </thead>
@@ -154,7 +154,7 @@
               <!-- CATEGORIES -->
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Categorias</h3>
+                  <h3 class="card-title">Modalidades</h3>
                   <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target='#add-category-modal'>Agregar</button>
                 </div>
                 <div class="card-body">
@@ -375,7 +375,7 @@
           }).done((response)=>{
             Swal.fire(
                 'Eliminada!',
-                'La categoría fue eliminada.',
+                'La modalidad fue eliminada.',
                 'success'
               ).then(()=>{
                 document.location.reload(true)
@@ -383,7 +383,7 @@
           }).fail((response)=>{
             Swal.fire(
                 'No eliminada!',
-                'Tu categoría no fue eliminada.',
+                'Tu modalidad no fue eliminada.',
                 'warning'
               )
           })
@@ -450,6 +450,17 @@
       $(e.currentTarget).find('input[name="content"]').val(question.content);
       $(e.currentTarget).find('select[name="required"]').val(question.required);
       $(e.currentTarget).find('input[name="order"]').val(question.order);
+      $(e.currentTarget).find('input[name="options"]').val(question.options);
+      $('#tipo-edit').on('change',function(){
+        if($('#tipo-edit').val()==3){
+          $('#options-edit').show()
+        }else{
+          $('#options-edit').hide()
+        }
+      })
+      if(question.type==3){
+        $('#options-edit').show()
+      }
     });
     function deleteQuestion(id){
       Swal.fire({
@@ -490,9 +501,9 @@
 
     $('#select-tipo').on('change',function(){
       if($('#select-tipo').val()==3){
-        $('#acl').show()
+        $('#options').show()
       }else{
-        $('#acl').hide()
+        $('#options').hide()
       }
     })
   </script>

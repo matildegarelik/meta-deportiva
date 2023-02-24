@@ -26,10 +26,23 @@
                     <label for="content" class="col-sm-2 col-form-label">Contenido</label>
                     <div class="col-sm-10">
                       <input type="text" class="form-control @error('content') is-invalid @enderror" name="content" placeholder="Content" >
-                      <span class="text-muted" id="acl" style="display:none">*Ingresar opciones separadas por una coma</span>
                     </div>
                    
                     @error('content')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+
+                <div class="form-group row" style="display:none" id="options">
+                    <label for="options" class="col-sm-2 col-form-label">Opciones</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control @error('options') is-invalid @enderror" name="options" placeholder="Opcion 1, opcion2, ..." >
+                      <span class="text-muted">*Ingresar opciones separadas por una coma</span>
+                    </div>
+                   
+                    @error('options')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>

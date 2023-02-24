@@ -31,6 +31,22 @@
 		<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" >
 		<link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}" >
 
+		<style>
+			.logout-btn{
+				color: #ff6600;
+    			font-weight: 700;
+				border: none;
+				background:none;
+				font-size: 12px;
+				line-height: 12px;
+				text-decoration: none;
+				text-transform: uppercase;
+				padding: 0 10px;
+				display: block;
+				font-family: 'Open Sans', sans-serif;
+			}
+		</style>
+
 		@yield('css')
 
 		<!--[if lt IE 9]>
@@ -67,7 +83,7 @@
 								<li>
 									<form action="{{route('logout')}}" method="POST"> 
 										@csrf
-										<button>Logout</button>
+										<button class="logout-btn">Logout</button>
 									</form>
 								</li>
 								@else

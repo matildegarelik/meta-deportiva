@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Exceptions\ErrorException;
 
 class Event extends Model
 {
+    use SoftDeletes;
     protected $fillable=[
         'type',
         'clasification_id',

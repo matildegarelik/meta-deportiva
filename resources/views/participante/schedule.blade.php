@@ -46,12 +46,12 @@
                                 <div class="col-sm-5 news-item-img">
                                     <div class="date">
                                         <a href="#">
-                                            <span class="day">{{date_format(new Datetime($ei->start_date),'j')}}</span>
-                                            <span class="month">{{date_format(new Datetime($ei->start_date),'F')}}</span>
-                                            <span class="year">{{date_format(new Datetime($ei->start_date),'Y')}}</span>
+                                            <span class="day">{{date_format(new Datetime($ei->event->start_date),'j')}}</span>
+                                            <span class="month">{{date_format(new Datetime($ei->event->start_date),'F')}}</span>
+                                            <span class="year">{{date_format(new Datetime($ei->event->start_date),'Y')}}</span>
                                         </a>
                                     </div>
-                                    <a href="#"><img src="{{asset('assets/images/latest-news-1.jpg') }}" alt="image"></a>
+                                    <a href="#"><img src="{{asset('images/eventos/'.$ei->event->main_image) }}" alt="image"></a>
                                 </div>
                                 <div class="col-sm-7 news-item-info">
                                     <h3><a href="#">{{$ei->event->name}}</a></h3>

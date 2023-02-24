@@ -49,7 +49,7 @@ class EventsController extends Controller
         ]);
 
         $imageName = time().'.'.$request->main_image->extension();
-        $request->main_image->move(public_path('images'), $imageName);
+        $request->main_image->move(public_path('images/eventos/'), $imageName);
 
         $event = Event::create([
             'type'=>$input["type"],
@@ -86,12 +86,13 @@ class EventsController extends Controller
         // hacer validaciones
         $input = $request->all();
         $id=$input['id'];
-        /*if(isset($request->main_image)){
+        $ev = Event::find($id);
+        $imageName=$ev->main_image;
+        if(isset($request->main_image)){
             $imageName = time().'.'.$request->main_image->extension();
-            $request->main_image->move(public_path('images'), $imageName);
-        }*/
+            $request->main_image->move(public_path('images/eventos/'), $imageName);
+        }
         if(isset($input['published'])){
-            $ev = Event::find($id);
             if(!count($ev->categories)){
                 return redirect()->route('admin.event.edit', ['id'=>$id,'msg'=>'No puede publicarse un evento sin al menos una categoría existente']);
             }
@@ -110,7 +111,7 @@ class EventsController extends Controller
             'external_link'=>$input["external_link"],
             'fb_page'=>$input["fb_page"],
             'ig_page'=>$input["ig_page"],
-            //'main_image'=>$imageName,
+            'main_image'=>$imageName,
             'featured_event'=>isset($input['featured']) ? true : false,
             'published'=>isset($input['published']) ? true : false,
             //'results'=>'',
@@ -200,7 +201,8 @@ class EventsController extends Controller
         $question = Question::create([
             'type'=>$input['type'],
             'content'=>$input['content'],
-            'required'=>$input['required'],
+            'options'=> $input['type']==3 ? $input['options'] : null,
+           'required'=>$input['required'],
             'order'=>$input['order'],
             'event_id'=>$input['event']
         ]);
@@ -212,6 +214,7 @@ class EventsController extends Controller
         $question = Question::where('id',$request->id)->update([
             'type'=>$input['type'],
             'content'=>$input['content'],
+            'options'=> $input['type']==3 ? $input['options'] : null,
             'required'=>$input['required'],
             'order'=>$input['order']
         ]);

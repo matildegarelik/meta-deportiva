@@ -9,7 +9,7 @@
     </div>
     
     <div class="seat-details">
-        <h3>Categorías</h3>
+        <h3>Modalidades</h3>
         <div class="seat-details-info ticket-price">
             <table class="table table-hover" id="categories-table">
                 <thead>

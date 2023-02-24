@@ -31,7 +31,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body px-3">
-                    <form method="POST" action="{{ route('admin.event.update') }}">
+                    <form method="POST" action="{{ route('admin.event.update') }}" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="id" value="{{$event->id}}">
                         <div class="row">

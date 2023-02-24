@@ -4,7 +4,7 @@
 
 @section('css')
 <style>
-    .event-highlights h1:before {
+.event-highlights h1:before {
     display: block;
     content: "";
     width: 5px;
@@ -13,6 +13,9 @@
     position: absolute;
     left: -25px;
     top: 3px;
+}
+.section-event-single-featured-header {
+    background: url(../images/eventos/{{$event->main_image}}) no-repeat center center;
 }
 </style>
 @endsection
@@ -37,7 +40,7 @@
         <h1>{{$event->name}}</h1>
         <ul class="ticket-purchase">
             <li>
-                Ticket from
+                Precio desde
             </li>
             <li>
                 <span>${{$event->starter_price()}}</span>

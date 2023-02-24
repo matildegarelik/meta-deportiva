@@ -118,6 +118,13 @@ class ParticipanteController extends Controller
     {
         $user_id = Auth::user()->id;
         $input = $request->all();
+        $imageName='';
+        if(isset($request->profile_picture) && $request->profile_picture!=null){
+            $imageName = time().'.'.$request->profile_picture->extension();
+            $request->profile_picture->move(public_path('images/usuarios/'), $imageName);
+
+        }
+        
         $participante=Participante::where('user_id',$user_id)->update([
             'name'=>$input['name'],
             'father_last_name'=>$input['father_last_name'],
@@ -133,7 +140,8 @@ class ParticipanteController extends Controller
             'city'=>$input['city'],
             'zipcode'=>$input['zipcode'],
             'state'=>$input['state'],
-            'country'=>$input['country']
+            'country'=>$input['country'],
+            'profile_picture'=>$imageName
 
         ]);
         
