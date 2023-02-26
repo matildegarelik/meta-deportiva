@@ -13,7 +13,7 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{route('home.admin')}}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{route('admin.organizations')}}">Organizations</a></li>
+            <li class="breadcrumb-item"><a href="{{route('admin.organizations')}}">Organizaciones</a></li>
             <li class="breadcrumb-item active">{{$organization->id}}</li>
           </ol>
         </div><!-- /.col -->
@@ -33,7 +33,7 @@
                 <div class="card-body px-3">
                     <div class="row">
                         <div class="form-group col-sm">
-                            <label for="name">Name</label>
+                            <label for="name">Nombre</label>
                             <input type="text" class="form-control" name="name" value="{{$organization->name}}" readonly>
                         </div>
                         <div class="form-group col-sm">
@@ -44,15 +44,15 @@
                     
                     <div class="row">
                         <div class="form-group col-sm">
-                            <label for="website">Website</label>
+                            <label for="website">Sitio web</label>
                             <input type="text" class="form-control" name="website" value="{{$organization->website}}" readonly>
                         </div>
                         <div class="form-group col-sm">
-                            <label for="fb_page">Facebook page</label>
+                            <label for="fb_page">Página de Facebook</label>
                             <input type="text" class="form-control" name="fb_page" value="{{$organization->fb_page}}" readonly>
                         </div>
                         <div class="form-group col-sm">
-                            <label for="ig_page">Instagram page</label>
+                            <label for="ig_page">Página de Instagram</label>
                             <input type="text" class="form-control" name="ig_page" value="{{$organization->ig_page}}" readonly>
                         </div>
                     </div>
@@ -75,9 +75,9 @@
                       <thead>
                       <tr>
                         <th>#</th>
-                        <th>Name</th>
+                        <th>Nombre</th>
                         <th>Email</th>
-                        <th>Actions</th>
+                        <th>Acciones</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -86,7 +86,10 @@
                               <td>{{$organizador->id}}</td>
                               <td>{{$organizador->name}}</td>
                               <td>{{$organizador->email}}</td>
-                              <td></td>
+                              <td>
+                                <a href="#" class="btn-link" data-toggle="modal" data-target='#edit-organizador-modal' data-obj="{{json_encode($organizador)}}"><i class="fas fa-pencil-alt ml-1"></i></a>
+                                <a href="#" class="btn-link" onclick="deleteOrganizador({{$organizador->id}})"><i class="fas fa-trash ml-1"></i></a>
+                              </td>
                           </tr>
                           @endforeach
                           
@@ -150,6 +153,7 @@
     </div>
     <!-- /.container-fluid -->
     @include('organizations.add-organizer-modal',['id'=>$organization->id])
+    @include('organizations.edit-organizer-modal')
   </div>
   <!-- /.content-header -->
 
@@ -218,6 +222,51 @@
               )
           })
           
+        }
+      })
+    }
+
+    $('#edit-organizador-modal').on('show.bs.modal', function(e) {
+      var organizador = $(e.relatedTarget).data('obj');
+      console.log(organizador)
+      $(e.currentTarget).find('span#id-org').html(organizador.id);
+      $(e.currentTarget).find('input[name="id"]').val(organizador.id);
+      $(e.currentTarget).find('input[name="name"]').val(organizador.name);
+      $(e.currentTarget).find('input[name="email"]').val(organizador.email);
+    });
+    function deleteOrganizador(id){
+      Swal.fire({
+        title: 'Estás seguro?',
+        text: "No vas a poder deshacer esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, borrar!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          var url = '{{ route("admin.organization.delete_organizer", ":id") }}';
+          url = url.replace(':id', id);
+          $.ajax({
+            method:'GET',
+            url: url
+
+          }).done((response)=>{
+            Swal.fire(
+                'Eliminado!',
+                'El organizador fue eliminado.',
+                'success'
+              ).then(()=>{
+                document.location.reload(true)
+              })
+          }).fail((response)=>{
+            Swal.fire(
+                'No eliminado!',
+                'El organizador no fue eliminado.',
+                'warning'
+              )
+          })
+    
         }
       })
     }

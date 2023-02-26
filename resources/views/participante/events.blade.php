@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
-@section('pagetitle','Events')
+@section('pagetitle','Eventos')
+
+@section('css')
+<style>
+    .section-search-content .search-result-item.sale .ribbon span{
+        font-size:9px;
+    }
+</style>
+@endsection
 
 @section('content')
 
@@ -76,13 +84,14 @@
                     </div>
                 </div>
                 @foreach($events as $event)
-                <div class="search-result-item">
+                <div class="search-result-item @if($event->results) sale @endif">
+                    @if($event->results)<div class="ribbon"><span>Resultados</span></div>@endif
                     <div class="row">
                         <div class="search-result-item-info col-sm-9">
                             <h3>{{$event->name}}</h3>
                             <ul class="row">
                                 <li class="col-sm-5 col-lg-6">
-                                    <span>Venue</span>
+                                    <span>Ubicación</span>
                                     {{$event->location}}
                                 </li>
                                 <li class="col-sm-4 col-lg-3">
@@ -92,8 +101,8 @@
                                     {{date_format(new Datetime($event->start_date),'F  j, Y')}}
                                 </li>
                                 <li class="col-sm-3">
-                                    <span>Time</span>
-                                    07:00 PM
+                                    <span>Horario</span>
+                                    {{date_format(new Datetime($event->start_date),'g:i A')}}
                                 </li>
                             </ul>
                         </div>

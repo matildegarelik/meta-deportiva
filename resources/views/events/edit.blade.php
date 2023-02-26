@@ -37,7 +37,12 @@
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="name">Nombre</label>
-                                <input type="text" class="form-control" name="name" value="{{$event->name}}">
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{$event->name}}">
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="row">
@@ -52,12 +57,25 @@
                                     </optgroup>
                                     @endforeach
                                 </select>
+                                @error('organizer')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="type">Tipo</label>
-                                <input type="text" class="form-control" name="type"  value="{{$event->type}}">
+                                <select class="form-control @error('type') is-invalid @enderror" name="type">
+                                    <option {{$event->type == 'Publico' ? 'selected' : ''}}>Publico</option>
+                                    <option {{$event->type == 'Privado' ? 'selected' : ''}}>Privado</option>
+                                  </select>
+                                @error('type')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="form-group col-sm">
                                 <label for="casification">Clasificación</label>
@@ -66,6 +84,11 @@
                                   <option value="{{$clasification->id}}" @if($event->clasification_id==$clasification->id) selected @endif>{{$clasification->id}}- {{$clasification->name}}</option>
                                 @endforeach
                                 </select>
+                                @error('clasification')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="form-check col-sm">
                                 <input type="checkbox" class="form-check-input mt-4" name="featured" @if($event->featured_event) checked @endif>
@@ -77,23 +100,53 @@
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="start_date">Fecha inicio</label>
-                                <input type="text" class="form-control" name="start_date"  value="{{$event->start_date}}">
+                                <div class="input-group date" id="start_date" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input @error('start_date') is-invalid @enderror" data-target="#start_date" name="start_date" value="{{$event->start_date}}"/>
+                                    <div class="input-group-append" data-target="#start_date" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                                @error('start_date')
+                                    <span style="font-size: 80%;color: #dc3545;">
+                                        <strong>{{ $message }}</strong>
+                                    <span>
+                                @enderror
                             </div>
                             <div class="form-group col-sm">
                                 <label for="end_date">Fecha fin</label>
-                                <input type="text" class="form-control" name="end_date"  value="{{$event->end_date}}">
+                                <div class="input-group date" id="end_date" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input @error('end_date') is-invalid @enderror" data-target="#end_date" name="end_date" value="{{$event->end_date}}"/>
+                                    <div class="input-group-append" data-target="#end_date" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                                @error('end_date')
+                                    <span style="font-size: 80%;color: #dc3545;">
+                                        <strong>{{ $message }}</strong>
+                                    <span>
+                                @enderror
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="name">Descripción</label>
                                 <textarea class="form-control" id="editor" rows="5" name="description">{{$event->description}}</textarea>
+                                @error('description')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div> 
                         </div>
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="location">Ubicación</label>
                                 <input type="text" class="form-control" name="location"  value="{{$event->location}}">
+                                @error('location')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="form-group col-sm">
                                 <label for="main_image">Imagen principal</label>
@@ -108,6 +161,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="form-group col-sm">
+                                <label for="results">Resultados</label>
+                                <input type="text" class="form-control" name="results"  value="{{$event->results}}">
+                            </div>
+                          </div>
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="website">Sitio web</label>
@@ -157,6 +216,15 @@ $('.select2bs4').select2({
     theme: 'bootstrap4'
   })
 $('#editor').ckeditor()
+
+$('#start_date').datetimepicker({ 
+    icons: { time: 'far fa-clock' },
+    date: '{{$event->start_date}}'
+ });
+$('#end_date').datetimepicker({ 
+    icons: { time: 'far fa-clock' } ,
+    date: '{{$event->end_date}}'
+});
 
 const urlParams = new URLSearchParams(window.location.search);
 if(urlParams.get('msg') && urlParams.get('msg')!='')

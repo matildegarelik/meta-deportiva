@@ -51,17 +51,22 @@
                 <div class="form-group row">
                     <label for="age_from" class="col-sm-2 col-form-label">Edad desde</label>
                     <div class="col-sm-4">
-                      <input type="number" step="1" class="form-control @error('age_from') is-invalid @enderror" name="age_from" placeholder="from">
+                        <input type="number" step="1" class="form-control @error('age_from') is-invalid @enderror" name="age_from" placeholder="from">
+                        @error('age_from')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                     <label for="age_to" class="col-sm-2 col-form-label">Edad hasta</label>
                     <div class="col-sm-4">
                       <input type="number" step="1" class="form-control @error('age_to') is-invalid @enderror" name="age_to" placeholder="to">
+                        @error('age_to')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
-                    @error('age_to')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
                 </div>
 
                 <div class="form-group row">

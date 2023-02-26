@@ -34,4 +34,8 @@ class Category extends Model
                 return "Femenino";
         }
     }
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
 }

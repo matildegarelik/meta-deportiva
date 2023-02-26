@@ -23,7 +23,7 @@ class OrganizationsController extends Controller
     {
         /*$event_inscriptos = EventInscripto::where('event_id',$id)->get();*/
         $organizadores = DB::table('organizers')->select(['organizers.organization_id','users.name as name', 'organizers.user_id', 'users.email as email', 'organizers.id'])
-            ->join('users','users.id','=','organizers.user_id')->where('organization_id',$id)->get();
+            ->join('users','users.id','=','organizers.user_id')->where('organization_id',$id)->where('organizers.deleted_at',null)->get();
         $categories = Category::where('event_id',$id)->get();
         return view('organizations.detail',['organization'=>Organization::find($id),'organizadores'=>$organizadores]);
     }
@@ -35,6 +35,12 @@ class OrganizationsController extends Controller
     {
         // hacer validaciones
         $input = $request->all();
+        $request->validate([
+            'org_name' => 'required',
+            'name' => 'required',
+            'email'=>'required|unique:users',
+            'password'=>'required|confirmed|min:6'
+        ]);
         $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
@@ -61,7 +67,10 @@ class OrganizationsController extends Controller
     }
     public function update_organization(Request $request)
     {
-        // hacer validaciones
+        $request->validate([
+            'name' => 'required',
+            'contacto_principal'=>'required'
+        ]);
         $input = $request->all();
         $id=$input['id'];
         $organization = array(
@@ -71,18 +80,20 @@ class OrganizationsController extends Controller
             'ig_page'=>$input["ig_page"],
             'user_id'=>$input["contacto_principal"],
         );
-        // falta main image, featured event, user creador
         DB::table('organizations')->where('id',$id)->update($organization);
         return redirect()->route('admin.organization', ['id'=>$id]);
-        
     }
     public function delete_organization($id){
-        Organizer::where('organization_id',$id)->delete();
+        //Organizer::where('organization_id',$id)->delete();
         return Organization::destroy($id);
     }
     public function create_organizer(Request $request)
     {
-        // hacer validaciones
+        $request->validate([
+            'name' => 'required',
+            'email'=>'required|unique:users',
+            'password'=>'required|confirmed|min:6'
+        ]);
         $input = $request->all();
         $user = User::create([
             'name' => $input['name'],
@@ -95,5 +106,28 @@ class OrganizationsController extends Controller
             'organization_id'=>$input['organization']
         ]);
         return redirect()->route('admin.organization', ['id'=>$input['organization']]);
+    }
+    public function update_organizer(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email'=>'required',
+            'password'=>'required|confirmed|min:6'
+        ]);
+        $input = $request->all();
+        $organizer = Organizer::find($input['id']);
+        $user_id = $organizer->user->id;
+        User::where('id',$user_id)->update([
+            'name'=>$input['name'],
+            'email' =>$input['email'],
+            'password'=>Hash::make($input['password'])
+        ]);
+        return redirect()->route('admin.organization', ['id'=>$organizer->organization_id]);
+    }
+    public function delete_organizer($id)
+    {
+        $organizer = Organizer::find($id);
+        $organizer->user()->delete();
+        return Organizer::destroy($id);
     }
 }

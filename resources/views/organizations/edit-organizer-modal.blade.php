@@ -1,18 +1,18 @@
-<div class="modal fade" id="add-organizer-modal" tabindex="-1" role="dialog" aria-hidden="true" >
+<div class="modal fade" id="edit-organizador-modal" tabindex="-1" role="dialog" aria-hidden="true" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title">Nuevo organizador</h4>
+            <h4 class="modal-title">Editar organizador #<span id="id-org"></span></h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-        <form method="POST" action="{{ route('admin.organization.register_organizer') }}">
+        <form method="POST" action="{{ route('admin.organization.update_organizer') }}">
             @csrf
-            <input type="hidden" name="organization" value="{{$id}}"/>
+            <input type="hidden" name="id" >
             <div class="input-group mb-3">
-                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Nombre completo" required autocomplete="name" autofocus>
+                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" required>
                 <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-user"></span>
@@ -26,7 +26,7 @@
             </div>
 
             <div class="input-group mb-3">
-               <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email" required autocomplete="email">
+               <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="Email" required autocomplete="email">
                <div class="input-group-append">
                 <div class="input-group-text">
                   <span class="fas fa-envelope"></span>
@@ -63,7 +63,7 @@
             </div>
 
             <div class="row mb-3">
-                <button type="submit" class="btn btn-primary btn-block">Registrar</button>
+                <button type="submit" class="btn btn-primary btn-block">Actualizar</button>
             </div>
         </form>
         </div>

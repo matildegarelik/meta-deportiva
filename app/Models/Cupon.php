@@ -19,4 +19,13 @@ class Cupon extends Model
         'event_id'
     ];
     public $timestamps = false;
+    public function es_valido()
+    {
+        $valido = true;
+        $curr_date = date('Y-m-d');
+        if($this->valid_from>$curr_date || $this->valid_to<$curr_date) $valido=false;
+        $usage = EventInscripto::where('cupon_id',$this->id)->count();
+        if($this->usage_limit<=$usage) $valido=false;
+        return $valido;
+    }
 }

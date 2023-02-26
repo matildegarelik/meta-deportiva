@@ -9,6 +9,7 @@ use App\Models\Participante;
 use App\Models\Cupon;
 use App\Models\User;
 use App\Models\Answer;
+use App\Models\Category;
 
 use Illuminate\Http\Request;
 use Auth;
@@ -61,7 +62,10 @@ class ParticipanteController extends Controller
         }else{
             $participante=Participante::where('user_id',$user_id)->first();
         }
-        return view('participante.registration_form',compact('event','participante'));
+        $datos_completos = $participante->datos_completos();
+        $edad=0;
+        if($datos_completos || $participante->date_of_birth) $edad = $participante->edad();
+        return view('participante.registration_form',compact('event','participante','datos_completos','edad'));
     }
     
     public function register(Request $request)
@@ -80,8 +84,8 @@ class ParticipanteController extends Controller
         ]);
 
         $event = Event::find($input['event']);
-        // registrar respuestas
-        foreach($event->questions as $q){
+        $category = Category::find($input['category']);
+        foreach($category->questions as $q){
             if(isset($input['ans-'.$q->id])){
                 Answer::create([
                     'event_inscripto_id'=>$event_inscripto->id,
@@ -118,11 +122,11 @@ class ParticipanteController extends Controller
     {
         $user_id = Auth::user()->id;
         $input = $request->all();
-        $imageName='';
+        $part = Participante::where('user_id',$user_id)->get();
+        $imageName=$part[0]->profile_picture;
         if(isset($request->profile_picture) && $request->profile_picture!=null){
             $imageName = time().'.'.$request->profile_picture->extension();
             $request->profile_picture->move(public_path('images/usuarios/'), $imageName);
-
         }
         
         $participante=Participante::where('user_id',$user_id)->update([
@@ -158,12 +162,16 @@ class ParticipanteController extends Controller
     public function validar_cupon($cupon)
     {
         $cupon = Cupon::where('code',$cupon)->get();
-        if(count($cupon)){
-            // chequear validez sgún limite de uso y fechas
+        if(count($cupon) && $cupon[0]->es_valido()){
             return $cupon[0];
         }else{
             return false;
         }
         
+    }
+    public function questions_view($id){
+        $category = Category::find($id);
+        $returnHTML = view('participante.registration_form.questions_view')->with('questions', $category->questions)->render();
+        return response()->json(array('success' => true, 'html'=>$returnHTML));
     }
 }

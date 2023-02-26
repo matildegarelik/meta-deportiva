@@ -24,6 +24,7 @@ use App\Http\Controllers\OrganizationsController;
 
 Route::get('/', [ParticipanteController::class, 'index'])->name('home');
 Route::get('/events', [ParticipanteController::class, 'events'])->name('participante.events');
+Route::get('/event-detail/{id}', [ParticipanteController::class, 'event'])->name('participante.event');
 
 
 
@@ -32,7 +33,6 @@ Auth::routes();
 // Participante Routes
 Route::middleware(['auth','user-role:participante'])->group(function(){
     Route::get('/home', [ParticipanteController::class, 'index'])->name('home');
-    Route::get('/event-detail/{id}', [ParticipanteController::class, 'event'])->name('participante.event');
     Route::get('/event-register/{id}', [ParticipanteController::class, 'registration_form'])->name('participante.registration_form');
     Route::post('/event-register/', [ParticipanteController::class, 'register'])->name('participante.save_register');
     Route::get('/schedule', [ParticipanteController::class, 'schedule'])->name('participante.schedule');
@@ -40,6 +40,7 @@ Route::middleware(['auth','user-role:participante'])->group(function(){
     Route::post('/profile/', [ParticipanteController::class, 'update_profile'])->name('participante.save_profile');
     Route::get('/upcoming', [ParticipanteController::class, 'upcoming'])->name('participante.upcoming');
     Route::get('/validar-cupon/{cupon}',[ParticipanteController::class, 'validar_cupon'])->name('participante.validar_cupon');
+    Route::get('/questions-view/{id}',[ParticipanteController::class, 'questions_view'])->name('participante.questions_view');
 });
 
 // Organizador Route
@@ -65,8 +66,13 @@ Route::middleware(['auth','user-role:admin,organizador'])->group(function(){
     Route::post('/admin/event/new-question', [EventsController::class, 'new_question'])->name('admin.event.new_question');
     Route::post('/admin/event/update-question', [EventsController::class, 'update_question'])->name('admin.event.update_question');
     Route::get('/admin/event/delete-question/{id}', [EventsController::class, 'delete_question'])->name('admin.event.delete_question');
+
+    Route::post('/admin/event/new-sponsor', [EventsController::class, 'new_sponsor'])->name('admin.event.new_sponsor');
+    Route::post('/admin/event/update-sponsor', [EventsController::class, 'update_sponsor'])->name('admin.event.update_sponsor');
+    Route::get('/admin/event/delete-sponsor/{id}', [EventsController::class, 'delete_sponsor'])->name('admin.event.delete_sponsor');
     
     Route::get('/admin/inscripcion/{id}', [EventsController::class, 'inscripcion'])->name('admin.inscripcion');
+    Route::get('/admin/event/delete-inscripcion/{id}', [EventsController::class, 'delete_inscripcion'])->name('admin.event.delete_inscripcion');
     
 });
 
@@ -88,4 +94,6 @@ Route::middleware(['auth','user-role:admin'])->group(function(){
     Route::get('/admin/organization/edit/{id}', [OrganizationsController::class, 'edit_organization'])->name('admin.organization.edit');
     Route::post('/admin/organization/edit', [OrganizationsController::class, 'update_organization'])->name('admin.organization.update');
     Route::post('/admin/organization/add-organizer', [OrganizationsController::class, 'create_organizer'])->name('admin.organization.register_organizer');
+    Route::post('/admin/organization/update-organizer', [OrganizationsController::class, 'update_organizer'])->name('admin.organization.update_organizer');
+    Route::get('/admin/organization/delete-organizer/{id}', [OrganizationsController::class, 'delete_organizer'])->name('admin.organization.delete_organizer');
 });

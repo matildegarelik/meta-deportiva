@@ -47,6 +47,10 @@ class Event extends Model
     {
         return $this->hasMany(Question::class)->orderBy('order');
     }
+    public function sponsors()
+    {
+        return $this->hasMany(Sponsor::class);
+    }
     public function starter_price()
     {
         try{

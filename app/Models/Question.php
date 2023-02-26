@@ -16,6 +16,11 @@ class Question extends Model
         'event_id',
         'required',
         'order',
-        'options'
+        'options',
+        'category_id'
     ];
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

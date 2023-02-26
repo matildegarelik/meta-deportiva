@@ -8,7 +8,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Detalles de Inscricpión #{{$inscripcion->id}}
+          <h1 class="m-0">Detalles de Inscripción #{{$inscripcion->id}}
           </h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
@@ -139,7 +139,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body px-3">
-                  <p>Categoría: <b>{{$inscripcion->category->name}}</b></p>
+                  <p>Modalidad: <b>{{$inscripcion->category->name}}</b></p>
                 </div>
               </div>
 

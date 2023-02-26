@@ -50,7 +50,14 @@
 		<!-- Custom styles for this template -->
 		<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" >
 		<link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}" >
-    <style>body, .card-title{font-size:120% !important;}</style>
+    <style>
+      body, .card-title{
+        font-size:120% !important;
+      }
+      .bootstrap-datetimepicker-widget.dropdown-menu {
+          width: 100% !important;
+      }
+    </style>
 	</head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
@@ -448,6 +455,10 @@
         <script src="{{ asset('assets/admin-lte/plugins/toastr/toastr.min.js')}}"></script>
         <script src="{{ asset('../assets/ckeditor/ckeditor.js') }}"></script>
         <script src="{{ asset('../assets/ckeditor/adapters/jquery.js') }}"></script>
+        <!--<script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
+          defer
+        ></script>-->
 
         @yield('js')
     </body>

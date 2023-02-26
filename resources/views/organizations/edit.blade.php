@@ -14,7 +14,7 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{route('home.admin')}}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{route('admin.organizations')}}">Organizations</a></li>
+            <li class="breadcrumb-item"><a href="{{route('admin.organizations')}}">Organizaciones</a></li>
             <li class="breadcrumb-item active">{{$organization->id}}</li>
           </ol>
         </div><!-- /.col -->
@@ -37,15 +37,25 @@
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="name">Nombre</label>
-                                <input type="text" class="form-control" name="name" value="{{$organization->name}}">
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{$organization->name}}" required>
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="form-group col-sm">
                               <label for="name">Contacto principal</label>
-                              <select class="form-control" name="contacto_principal">
+                              <select class="form-control @error('contacto_principal') is-invalid @enderror" name="contacto_principal">
                                 @foreach($organization->organizers as $organizador)
                                 <option value="{{$organizador->user_id}}" @if($organization->user->id==$organizador->user_id) selected @endif>{{$organizador->user->name}}</option>
                                 @endforeach
                               </select>
+                              @error('contacto_principal')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                           </div>
                         </div>
                         

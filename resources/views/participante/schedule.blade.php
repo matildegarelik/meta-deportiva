@@ -51,12 +51,13 @@
                                             <span class="year">{{date_format(new Datetime($ei->event->start_date),'Y')}}</span>
                                         </a>
                                     </div>
-                                    <a href="#"><img src="{{asset('images/eventos/'.$ei->event->main_image) }}" alt="image"></a>
+                                    <a href="{{ route('participante.event',$ei->event->id) }}"><img src="{{asset('images/eventos/'.$ei->event->main_image) }}" alt="image"></a>
                                 </div>
                                 <div class="col-sm-7 news-item-info">
-                                    <h3><a href="#">{{$ei->event->name}}</a></h3>
-                                    <span class="meta-data">Clasificacion: {{$ei->event->clasification->name}}  | Categoría: {{$ei->category->name}}</span>
+                                    <h3><a href="{{ route('participante.event',$ei->event->id) }}">{{$ei->event->name}}</a></h3>
+                                    <span class="meta-data">Clasificacion: {{$ei->event->clasification->name}}  | Modalidad: {{$ei->category->name}}</span>
                                     <p>Ubicación: {{$ei->event->location}}</p>
+                                    <p>Horario: {{date_format(new Datetime($ei->event->start_date),'g:i A')}}</p>
                                 </div>
                             </li>
                             @endforeach

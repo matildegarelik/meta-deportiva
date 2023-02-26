@@ -3,7 +3,7 @@
         <h3>Ubicación & Información del evento</h3>
         <div class="venue-details-info">
             <p>{{$event->name}} - {{$event->location}}</p>
-            <p>{{date_format(new Datetime($event->start_date),'l')}} <span>
+            <p>{{date_format(new Datetime($event->start_date),'g:i A l')}} <span>
                 {{date_format(new Datetime($event->start_date),'F  j, Y')}}</span></p>
         </div>
     </div>
@@ -24,7 +24,7 @@
                 <tbody>
                     <input id="input-cat" name="category" type="hidden" value="{{$event->categories[0]->id}}">
                     @foreach($event->categories as $cat)
-                    <tr class="select-seat cat" data-id="{{$cat->id}}" data-precio="{{$cat->price}}">
+                    <tr class="select-seat cat @if($cat->cupo_disponible()==0) no-disp @endif" data-id="{{$cat->id}}" data-precio="{{$cat->price}}" data-cat='{{$cat}}'>
                         
                         <td>{{$cat->name}}</td>
                         <td>{{$cat->age_from}} - {{$cat->age_to}}</td>

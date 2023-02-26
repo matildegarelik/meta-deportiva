@@ -3,7 +3,7 @@
     <div class="venue-details mt-5">
         <div class="venue-details-info" style="margin-bottom:0px;">
             <input type="text" id="cupon-code">
-            <button type="button" onclick="validarCupon()">Validar</button>
+            <button type="button" onclick="validarCupon()" id="validar-btn">Validar</button>
             <input type="hidden" id="cupon_id" name="cupon_id" value="0">
         </div>
         <div class="seat-details-info-price">

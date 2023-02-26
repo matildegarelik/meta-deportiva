@@ -64,15 +64,9 @@
 						<div class="top-left">
 							<ul>
 								<li>
-									<a href="#">
-										<i class="fa fa-phone"></i>
-										+62274 889767
-									</a>
-								</li>
-								<li>
-									<a href="mailto:hello@myticket.com"> 
+									<a href="mailto:info@metadeportiva.com"> 
 										<i class="fa fa-envelope-o"></i>
-										hello@myticket.com
+										info@metadeportiva
 									</a>
 								</li>
 							</ul>

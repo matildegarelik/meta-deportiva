@@ -17,6 +17,15 @@
 .section-event-single-featured-header {
     background: url(../images/eventos/{{$event->main_image}}) no-repeat center center;
 }
+.results-btn{
+    margin-left:20px;
+    background:#fff !important;
+    color:#ff5700 !important;
+}
+.results-btn:hover{
+    background:#ff5700 !important;
+    color:#fff !important;
+}
 </style>
 @endsection
 
@@ -48,6 +57,11 @@
             <li>
                 <a href="{{  route('participante.registration_form', $event->id)}}">Registrarse</a>
             </li>
+            @if($event->results)
+            <li>
+                <a href="{{ $event->results}}" target="_blank" class="results-btn">Ver resultados</a>
+            </li>
+            @endif
         </ul>
     </div>
 </section>
@@ -118,5 +132,26 @@
 <section class="event-map">
     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2993.6864762013092!2d2.1206311157511477!3d41.380895979264686!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a498f576297baf%3A0x44f65330fe1b04b9!2sCamp+Nou!5e0!3m2!1sen!2sph!4v1491114335931" width="1200" height="435" allowfullscreen></iframe>
 </section>
-
+@if(count($event->sponsors))
+<section class="section-event-single-content">
+    <div class="container">
+        <div class="row">
+            <div id="primary" class="col-sm-12 col-md-12">
+                <div class="event-highlights">
+                    <h2>Sponsors</h2>
+                    <div class="row">
+                        @foreach($event->sponsors as $sponsor)
+                        <div class="col-sm-3">
+                            <a href="#">
+                                <img src="{{ asset('images/eventos/sponsors/'.$sponsor->image) }}" alt="image" style="height: 50px;">
+                            </a>
+                        </div>
+                    @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
 @endsection

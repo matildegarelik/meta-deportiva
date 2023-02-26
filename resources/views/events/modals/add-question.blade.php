@@ -67,6 +67,21 @@
                         </span>
                     @enderror
                 </div>
+                <div class="form-group row">
+                    <label for="category" class="col-sm-2 col-form-label">Modalidad</label>
+                    <div class="col-sm-10">
+                      <select name="category" class="form-control @error('category') is-invalid @enderror">
+                            @foreach($event->categories as $cat)
+                            <option value="{{$cat->id}}">{{$cat->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @error('category')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
         
             </div>
             <div class="modal-footer justify-content-between">

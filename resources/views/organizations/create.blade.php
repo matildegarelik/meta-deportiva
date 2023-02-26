@@ -35,7 +35,12 @@
                         <div class="row">
                             <div class="form-group col-sm">
                                 <label for="name">Nombre</label>
-                                <input type="text" class="form-control" name="org_name">
+                                <input type="text" class="form-control @error('org_name') is-invalid @enderror" name="org_name" required>
+                                @error('org_name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
                         
@@ -56,7 +61,7 @@
                         <h4 class=" card-title mt-4 mb-2">Contacto principal</h4>
                         <hr>
                         <div class="input-group mb-3">
-                          <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Nombre completo" required autocomplete="name" autofocus>
+                          <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Nombre completo" required autofocus>
                           <div class="input-group-append">
                               <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -70,7 +75,7 @@
                       </div>
           
                       <div class="input-group mb-3">
-                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email" required autocomplete="email">
+                         <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email" required>
                          <div class="input-group-append">
                           <div class="input-group-text">
                             <span class="fas fa-envelope"></span>

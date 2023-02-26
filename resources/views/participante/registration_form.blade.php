@@ -219,25 +219,84 @@ $(function() {
             next: 'Siguiente',
             previous: 'Previo'
         },
-    });
-    
-    var Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000
+    }).on("leaveStep", function (e, anchorObject, stepIndex, stepDirection) {
+        let selected_cat=false,cat;
+        $('tr.cat').each(function(e){
+            if($(this).hasClass('selected')){
+                selected_cat=true
+                cat = $(this).data('cat')
+            }
+        })
+        if(!selected_cat && stepDirection>stepIndex){
+            e.preventDefault()
+            toastr.warning('Seleccionar modalidad')
+            return;
+        }
+        if(selected_cat && stepDirection>stepIndex){
+            let edad = parseInt('{{$edad}}');
+            //console.log(edad)
+            if(edad<cat.age_from || edad>cat.age_to){
+                e.preventDefault()
+                toastr.warning('Tu edad no es compatible con esta modalidad')
+                return;
+            }
+        }
+        if(stepDirection>1){
+            if(!'{{$datos_completos}}' || '{{$datos_completos}}'==''){
+                e.preventDefault()
+                toastr.error('Completar datos personales antes de continuar')
+                return;
+            }
+        }
+        if(stepDirection==2){
+            let url = '{{route("participante.questions_view",":id")}}'
+            url = url.replace(':id', cat.id);
+            $.get(url, function(data){
+                if(data.success){
+                    $('#questions-container').html(data.html)
+                }else{
+                    e.preventDefault()
+                    toastr.error('Error')
+                    return;
+                }
+            })
+        }
+        if(stepDirection==3){
+            let all_required=true;
+            $('div.question-req').each(function(ev){
+                let id = $(this).data('id');
+                let type = $(this).data('type');
+                let selector = `input[name="ans-${id}"]:checked`
+                if(type==1){
+                    selector= `textarea[name="ans-${id}"]`
+                }
+                //$(selector).val()
+                if(!$(selector).val() || $(selector).val()=='' || $(selector).val()==null){
+                    e.preventDefault()
+                    all_required=false;
+                }
+                if(!all_required){
+                    toastr.warning('Responder todas las preguntas requeridas')
+                }
+                
+                //if($(this).hasClass('selected')) selected_cat=true
+            })
+        }
     });
 });
 $('tr').on('click', function(){
     if ($(this).hasClass("select-seat") && $(this).hasClass("cat")) { 
         //$(this).siblings().removeClass("selected");
         //$(this).addClass('selected');
-        
-        let cat_id = $(this).data('id')
-        $('#input-cat').val(cat_id)
-        let precio = $(this).data('precio')
-        $('#total_price').html(precio)
-        
+        if($(this).hasClass('no-disp')){
+            $(this).removeClass('selected');
+            toastr.warning('La modalidad seleccionada no tiene cupo')
+        }else{
+            let cat_id = $(this).data('id')
+            $('#input-cat').val(cat_id)
+            let precio = $(this).data('precio')
+            $('#total_price').html(precio)
+        }
     }
 })
 function validarCupon(){
@@ -250,6 +309,7 @@ function validarCupon(){
             $('#total_price').html(curr-data.discount_amount)
             $('#cupon_id').val(data.id)
             $('#cupon-code').prop('readonly', true)
+            $('#validar-btn').prop('disabled',true)
         }else{
             toastr.error('Cupón inválido')
         }

@@ -88,6 +88,12 @@
                         </div>
                     </div>
                     <div class="row">
+                      <div class="form-group col-sm">
+                          <label for="results">Resultados</label>
+                          <input type="text" class="form-control" name="results"  value="{{$event->results}}" readonly>
+                      </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-sm">
                             <label for="website">Sitio web</label>
                             <input type="text" class="form-control" name="website"  value="{{$event->website}}" readonly>
@@ -140,7 +146,7 @@
                               <td>{{$inscripto->categoria}}</td>
                               <td>
                                 <a href="{{ route('admin.inscripcion', ['id'=>$inscripto->inscripcion_id]) }}"><i class="fas fa-eye ml-1"></i></a>
-                                <i class="fas fa-trash ml-1"></i>
+                                <a href="#" class="btn-link" onclick="deleteInscripcion({{$inscripto->inscripcion_id}})"><i class="fas fa-trash ml-1"></i></a>
                               </td>
                           </tr>
                           @endforeach
@@ -249,7 +255,7 @@
                         <th>Tipo</th>
                         <th>Contenido</th>
                         <th>Requerida</th>
-                        <th>Orden</th>
+                        <th>Modalidad</th>
                         <th>Acciones</th>
                       </tr>
                       </thead>
@@ -260,10 +266,47 @@
                               <td>@if($question->type==1) Open field @elseif($question->type==2) Yes/No @else Select one option @endif</td>
                               <td>{{$question->content}}</td>
                               <td>@if($question->required) Yes @else No @endif</td>
-                              <td>{{$question->order}}</td>
+                              <td>{{$question->category->name}}</td>
                               <td>
                                 <a href="#" class="btn-link" data-toggle="modal" data-target='#edit-question-modal' data-obj="{{$question}}"><i class="fas fa-pencil-alt ml-1"></i></a>
                                 <a href="#" class="btn-link" onclick="deleteQuestion({{$question->id}})"><i class="fas fa-trash ml-1"></i></a>
+                              </td>
+                          </tr>
+                          @endforeach
+                          
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SPONSORS -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Sponsors</h3>
+                  <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target='#add-sponsor-modal'>Agregar</button>
+                </div>
+                <div class="card-body">
+                  <div class="card-body">
+                   
+                    <table id="sponsors-table" class="table table-bordered table-hover">
+                      <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                        @foreach($event->sponsors as $sponsor)
+                          <tr>
+                              <td>{{$sponsor->id}}</td>
+                              <td><img class="sponsor-img-tbl" src="{{asset('images/eventos/sponsors/'.$sponsor->image)}}"></td>
+                              <td>{{$sponsor->name}}</td>
+                              <td>
+                                <a href="#" class="btn-link" data-toggle="modal" data-target='#edit-sponsor-modal' data-obj="{{$sponsor}}"><i class="fas fa-pencil-alt ml-1"></i></a>
+                                <a href="#" class="btn-link" onclick="deleteSponsor({{$sponsor->id}})"><i class="fas fa-trash ml-1"></i></a>
                               </td>
                           </tr>
                           @endforeach
@@ -286,8 +329,10 @@
     @include('events.modals.edit-category')
     @include('events.modals.add-cupon',['id'=>$event->id])
     @include('events.modals.edit-cupon')
-    @include('events.modals.add-question',['id'=>$event->id])
-    @include('events.modals.edit-question')
+    @include('events.modals.add-question',['id'=>$event->id,'event'=>$event])
+    @include('events.modals.edit-question',['event'=>$event])
+    @include('events.modals.add-sponsor',['id'=>$event->id])
+    @include('events.modals.edit-sponsor')
   </div>
   <!-- /.content-header -->
 
@@ -340,12 +385,23 @@
         "buttons": ["copy", "excel", "pdf", "print"]
       }).buttons().container().appendTo('#questions-table_wrapper .col-md-6:eq(0)');
 
+      $('#sponsors-table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        "buttons": ["copy", "excel", "pdf", "print"]
+      }).buttons().container().appendTo('#sponsors-table_wrapper .col-md-6:eq(0)');
+
     });
 
     $('#edit-category-modal').on('show.bs.modal', function(e) {
 
       var category = $(e.relatedTarget).data('obj');
-      console.log(category)
+      //console.log(category)
       $(e.currentTarget).find('span#id-cat').html(category.id);
       $(e.currentTarget).find('input[name="id"]').val(category.id);
       $(e.currentTarget).find('input[name="name"]').val(category.name);
@@ -451,6 +507,7 @@
       $(e.currentTarget).find('select[name="required"]').val(question.required);
       $(e.currentTarget).find('input[name="order"]').val(question.order);
       $(e.currentTarget).find('input[name="options"]').val(question.options);
+      $(e.currentTarget).find('select[name="category"]').val(question.category_id);
       $('#tipo-edit').on('change',function(){
         if($('#tipo-edit').val()==3){
           $('#options-edit').show()
@@ -499,6 +556,52 @@
       })
     }
 
+    $('#edit-sponsor-modal').on('show.bs.modal', function(e) {
+      var sponsor = $(e.relatedTarget).data('obj');
+      //console.log(category)
+      $(e.currentTarget).find('span#id-sponsor').html(sponsor.id);
+      $(e.currentTarget).find('input[name="id"]').val(sponsor.id);
+      $(e.currentTarget).find('input[name="name"]').val(sponsor.name);
+      $(e.currentTarget).find('img#image').prop('src',"{{asset('images/eventos/sponsors/')}}"+'/'+sponsor.image);
+      
+    });
+    function deleteSponsor(id){
+      Swal.fire({
+        title: 'Estás seguro?',
+        text: "Esto no va a poder deshacerse!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, borrar!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          var url = '{{ route("admin.event.delete_sponsor", ":id") }}';
+          url = url.replace(':id', id);
+          $.ajax({
+            method:'GET',
+            url: url
+
+          }).done((response)=>{
+            Swal.fire(
+                'Eliminado!',
+                'El sponsor fue eliminado',
+                'success'
+              ).then(()=>{
+                document.location.reload(true)
+              })
+          }).fail((response)=>{
+            Swal.fire(
+                'No eliminada!',
+                'El sponsor no fue eliminado',
+                'warning'
+              )
+          })
+          
+        }
+      })
+    }
+
     $('#select-tipo').on('change',function(){
       if($('#select-tipo').val()==3){
         $('#options').show()
@@ -506,5 +609,42 @@
         $('#options').hide()
       }
     })
+
+    function deleteInscripcion(id){
+      Swal.fire({
+        title: 'Estás seguro?',
+        text: "No vas a poder deshacer esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, borrar!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          var url = '{{ route("admin.event.delete_inscripcion", ":id") }}';
+          url = url.replace(':id', id);
+          $.ajax({
+            method:'GET',
+            url: url
+
+          }).done((response)=>{
+            Swal.fire(
+                'Eliminada!',
+                'La inscripción fue eliminada.',
+                'success'
+              ).then(()=>{
+                document.location.reload(true)
+              })
+          }).fail((response)=>{
+            Swal.fire(
+                'No eliminada!',
+                'La inscripción no fue eliminada.',
+                'warning'
+              )
+          })
+    
+        }
+      })
+    }
   </script>
 @endsection
