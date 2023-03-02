@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
             $table->string('results')->nullable();
-            $table->double('lat',15,8)->nullable();
-            $table->double('long',15,8)->nullable();
+            $table->string('lat')->default('0');
+            $table->string('long')->default('0');
         });
     }
 
