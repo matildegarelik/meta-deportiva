@@ -6,6 +6,7 @@ use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\OrganizationsController;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,3 +98,10 @@ Route::middleware(['auth','user-role:admin'])->group(function(){
     Route::post('/admin/organization/update-organizer', [OrganizationsController::class, 'update_organizer'])->name('admin.organization.update_organizer');
     Route::get('/admin/organization/delete-organizer/{id}', [OrganizationsController::class, 'delete_organizer'])->name('admin.organization.delete_organizer');
 });
+/*Route::get('send_test_email', function(){
+	Mail::raw('Sending emails with Mailgun and Laravel is easy!', function($message)
+	{
+		$message->subject('Subject');
+        $message->to('garelikmatilde@gmail.com');
+	});
+});*/

@@ -7,12 +7,15 @@
     "require": {
         "php": "^8.0.2",
         "almasaeed2010/adminlte": "~3.2",
+        "ckeditor/ckeditor": "4.*",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
-        "ckeditor/ckeditor": "4.*"
+        "mailchimp/mailchimp": "^2.0",
+        "symfony/http-client": "^6.2",
+        "symfony/mailgun-mailer": "^6.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

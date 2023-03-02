@@ -95,6 +95,12 @@ class ParticipanteController extends Controller
             }
             
         }
+
+        Mail::raw('Se ha registrado al evento'.$event->name.', que transcurrirá en '.$event->location.' en la fecha '.$event->start_date, function($message)
+        {
+            $message->subject('Registro a evento exitoso!');
+            $message->to(Auth::user()->email);
+        });
         
         return redirect()->route('participante.schedule');
     }

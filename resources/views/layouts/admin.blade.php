@@ -52,10 +52,16 @@
 		<link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}" >
     <style>
       body, .card-title{
-        font-size:120% !important;
+        font-size:130% !important;
+      }
+      input{
+        line-height: 20px !important;
       }
       .bootstrap-datetimepicker-widget.dropdown-menu {
           width: 100% !important;
+      }
+      .form-control{
+        font-size: 1.3rem !important;
       }
     </style>
 	</head>
@@ -455,10 +461,6 @@
         <script src="{{ asset('assets/admin-lte/plugins/toastr/toastr.min.js')}}"></script>
         <script src="{{ asset('../assets/ckeditor/ckeditor.js') }}"></script>
         <script src="{{ asset('../assets/ckeditor/adapters/jquery.js') }}"></script>
-        <!--<script
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
-          defer
-        ></script>-->
 
         @yield('js')
     </body>

@@ -52,7 +52,9 @@ class EventsController extends Controller
             'description'=>'required',
             'location'=>'required',
             'organizer'=>"required",
-            'clasification'=>'required'
+            'clasification'=>'required',
+            'lat'=>'required',
+            'long'=>'required'
         ]);
 
         $imageName=null;
@@ -78,7 +80,9 @@ class EventsController extends Controller
             'published'=>isset($input['published']) ? true : false,
             //'results'=>'',
             'user_id'=>Auth::user()->id,
-            'organizer_id'=>$input['organizer']
+            'organizer_id'=>$input['organizer'],
+            'lat' =>str_replace(',','.',$input['lat']),
+            'long' => str_replace(',','.',$input['long'])
         ]);
         //falta lat y long
         return redirect()->route('admin.events');
@@ -103,7 +107,9 @@ class EventsController extends Controller
             'description'=>'required',
             'location'=>'required',
             'organizer'=>"required",
-            'clasification'=>'required'
+            'clasification'=>'required',
+            'lat'=>'required',
+            'long'=>'required'
         ]);
         $input = $request->all();
         $id=$input['id'];
@@ -136,10 +142,25 @@ class EventsController extends Controller
             'published'=>isset($input['published']) ? true : false,
             'results'=>$input['results'],
             //'user_id'=>1,
-            'organizer_id'=>$input['organizer']
+            'organizer_id'=>$input['organizer'],
+            'lat' =>str_replace(',','.',$input['lat']),
+            'long' => str_replace(',','.',$input['long'])
         );
-        // falta  user creador
         DB::table('events')->where('id',$id)->update($event);
+
+        if($input['results'] && $input['results']!=''){
+            $inscriptos = EventInscripto::where('event_id',$ev->id)->all();
+            foreach($inscriptos as $inscripto){
+                Mail::raw('Se han publicado los resultados del evento '.$ev->name.'. Puede verlos en '. route('participante.event',['id'=>$ev->id]), function($message)
+                {
+                    $message->subject('Resultados de evento disponibles!');
+                    $message->to($inscripto->user->email);
+                });
+            }
+            
+        }
+
+
         return redirect()->route('admin.event', ['id'=>$id]);
         
     }

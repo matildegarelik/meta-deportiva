@@ -28,7 +28,9 @@ class Event extends Model
         'external_link',
         'results',
         'user_id',
-        'organizer_id'
+        'organizer_id',
+        'lat',
+        'long'
     ];
 
     public function organizer()

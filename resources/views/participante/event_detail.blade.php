@@ -122,15 +122,25 @@
                     {!! $event->description !!}
                 </div>
                 <div class="event-location">
-                    <h2>Location</h2>
-                    <p><span>Camp Nou</span> C. Aristides Maillol, 12 (Av. Joan XIII) Barcelona</p>
+                    <h2>Ubicación</h2>
+                    <p>{{$event->location}}</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 <section class="event-map">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2993.6864762013092!2d2.1206311157511477!3d41.380895979264686!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a498f576297baf%3A0x44f65330fe1b04b9!2sCamp+Nou!5e0!3m2!1sen!2sph!4v1491114335931" width="1200" height="435" allowfullscreen></iframe>
+    <!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2993.6864762013092!2d2.1206311157511477!3d41.380895979264686!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a498f576297baf%3A0x44f65330fe1b04b9!2sCamp+Nou!5e0!3m2!1sen!2sph!4v1491114335931" width="1200" height="435" allowfullscreen></iframe>-->
+    <iframe
+        width="600"
+        height="450"
+        style="border:0"
+        loading="lazy"
+        allowfullscreen
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyC1ftWVTDrIHJfgbBUHeyEJmDbovqpozD4
+            &q={{urlencode($event->location)}}&center={{$event->lat}},{{$event->long}}">
+    </iframe>
 </section>
 @if(count($event->sponsors))
 <section class="section-event-single-content">
