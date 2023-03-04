@@ -84,7 +84,7 @@
                         </div>
                         <div class="form-group col-sm">
                             <label for="main_image">Imagen principal</label>
-                            <p><img src="{{ asset('images/eventos/'.$event->main_image) }}" style="max-height: 70px;"></p>
+                            <p><img src="{{ asset(env('PUBLIC_PATH').'images/eventos/'.$event->main_image) }}" style="max-height: 70px;"></p>
                         </div>
                     </div>
                     <div class="row">
@@ -211,7 +211,6 @@
                         <th>#</th>
                         <th>Código</th>
                         <th>Descuento</th>
-                        <th>Porcentaje</th>
                         <th>Validez</th>
                         <th>Límite de uso</th>
                         <th>Acciones</th>
@@ -222,8 +221,7 @@
                           <tr>
                               <td>{{$cupon->id}}</td>
                               <td>{{$cupon->code}}</td>
-                              <td>${{$cupon->discount_amount}}</td>
-                              <td>{{$cupon->percentage}}%</td>
+                              <td>@if($cupon->discount_amount) ${{$cupon->discount_amount}} @else {{$cupon->percentage}}% @endif</td>
                               <td>{{$cupon->valid_from}} - {{$cupon->valid_to}}</td>
                               <td>{{$cupon->usage_limit}}</td>
                               <td>
@@ -263,10 +261,10 @@
                         @foreach($questions as $question)
                           <tr>
                               <td>{{$question->id}}</td>
-                              <td>@if($question->type==1) Open field @elseif($question->type==2) Yes/No @else Select one option @endif</td>
+                              <td>@if($question->type==1) PREGUNTA ABIERTA @elseif($question->type==2) PREGUNTA SI / NO @else OPCIÓN MÚLTIPLE @endif</td>
                               <td>{{$question->content}}</td>
-                              <td>@if($question->required) Yes @else No @endif</td>
-                              <td>{{$question->category->name}}</td>
+                              <td>@if($question->required) SI @else NO @endif</td>
+                              <td>{{$question->category? $question->category->name : 'Todas'}}</td>
                               <td>
                                 <a href="#" class="btn-link" data-toggle="modal" data-target='#edit-question-modal' data-obj="{{$question}}"><i class="fas fa-pencil-alt ml-1"></i></a>
                                 <a href="#" class="btn-link" onclick="deleteQuestion({{$question->id}})"><i class="fas fa-trash ml-1"></i></a>
@@ -302,7 +300,7 @@
                         @foreach($event->sponsors as $sponsor)
                           <tr>
                               <td>{{$sponsor->id}}</td>
-                              <td><img class="sponsor-img-tbl" src="{{asset('images/eventos/sponsors/'.$sponsor->image)}}"></td>
+                              <td><img style="max-height:30px;" class="sponsor-img-tbl" src="{{asset(env('PUBLIC_PATH').'images/eventos/sponsors/'.$sponsor->image)}}"></td>
                               <td>{{$sponsor->name}}</td>
                               <td>
                                 <a href="#" class="btn-link" data-toggle="modal" data-target='#edit-sponsor-modal' data-obj="{{$sponsor}}"><i class="fas fa-pencil-alt ml-1"></i></a>
@@ -454,8 +452,13 @@
       $(e.currentTarget).find('span#id-cup').html(cupon.id);
       $(e.currentTarget).find('input[name="id"]').val(cupon.id);
       $(e.currentTarget).find('input[name="code"]').val(cupon.code);
-      $(e.currentTarget).find('input[name="discount_amount"]').val(cupon.discount_amount);
-      $(e.currentTarget).find('input[name="percentage"]').val(cupon.percentage);
+      if(cupon.discount_amount && cupon.discount_amount!=null){
+        $(e.currentTarget).find('input[name="discount_amount"]').val(cupon.discount_amount);
+        $(e.currentTarget).find('select[name="tipo-desc"]').val('Monto');
+      }else{
+        $(e.currentTarget).find('input[name="discount_amount"]').val(cupon.percentage);
+        $(e.currentTarget).find('select[name="tipo-desc"]').val('Porcentaje');
+      }
       $(e.currentTarget).find('input[name="valid_from"]').val(cupon.valid_from);
       $(e.currentTarget).find('input[name="valid_to"]').val(cupon.valid_to);
       $(e.currentTarget).find('input[name="usage_limit"]').val(cupon.usage_limit);

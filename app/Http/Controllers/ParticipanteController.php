@@ -10,6 +10,7 @@ use App\Models\Cupon;
 use App\Models\User;
 use App\Models\Answer;
 use App\Models\Category;
+use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Http\Request;
 use Auth;
@@ -85,7 +86,7 @@ class ParticipanteController extends Controller
 
         $event = Event::find($input['event']);
         $category = Category::find($input['category']);
-        foreach($category->questions as $q){
+        foreach($category->questions() as $q){
             if(isset($input['ans-'.$q->id])){
                 Answer::create([
                     'event_inscripto_id'=>$event_inscripto->id,
@@ -96,11 +97,11 @@ class ParticipanteController extends Controller
             
         }
 
-        Mail::raw('Se ha registrado al evento'.$event->name.', que transcurrirá en '.$event->location.' en la fecha '.$event->start_date, function($message)
+        /*Mail::raw('Se ha registrado al evento'.$event->name.', que transcurrirá en '.$event->location.' en la fecha '.$event->start_date, function($message)
         {
             $message->subject('Registro a evento exitoso!');
             $message->to(Auth::user()->email);
-        });
+        });*/
         
         return redirect()->route('participante.schedule');
     }
@@ -177,7 +178,7 @@ class ParticipanteController extends Controller
     }
     public function questions_view($id){
         $category = Category::find($id);
-        $returnHTML = view('participante.registration_form.questions_view')->with('questions', $category->questions)->render();
+        $returnHTML = view('participante.registration_form.questions_view')->with('questions', $category->questions())->render();
         return response()->json(array('success' => true, 'html'=>$returnHTML));
     }
 }

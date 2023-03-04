@@ -41,7 +41,7 @@
                             </a>
                         </div>
                         <a href="#">
-                            <img src="{{ asset('images/eventos/'.$event->main_image) }}" alt="image">
+                            <img src="{{ asset(env('PUBLIC_PATH').'images/eventos/'.$event->main_image) }}" alt="image">
                         </a>
                         <div class="info">
                             <p>{{$event->name}}<span>{{$event->location}}</span></p>
@@ -59,7 +59,7 @@
     <div class="container">
         <div class="row">
             <div class="section-header">
-                <h2>Event by Clasification</h2>
+                <h2>Eventos por clasificación</h2>
             </div>
             <div class="section-content">
                 <ul class="row clearfix">

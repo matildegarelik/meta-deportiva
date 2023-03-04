@@ -62,7 +62,7 @@ hr{
         <div class="row">
             <div class="profile-picture">
                 @if($participante->profile_picture)
-                    <img src="{{asset('images/usuarios/'.$participante->profile_picture)}}">
+                    <img src="{{asset(env('PUBLIC_PATH').'images/usuarios/'.$participante->profile_picture)}}">
                 @elseif($participante->gender=='2')
                     <img src="{{asset('assets/admin-lte/dist/img/avatar3.png')}}" />
                 @else

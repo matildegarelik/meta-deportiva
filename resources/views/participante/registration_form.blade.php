@@ -26,9 +26,8 @@ th,td{
     width: 20% !important;
 }
 .ticket-price .table > tbody {
-    overflow-y: scroll;
+    overflow-y: visible;
     height:auto;
-    max-height:250px;
 }
 .sw .toolbar {
     margin-top: 60px;
@@ -303,10 +302,14 @@ function validarCupon(){
     //e.prventDefault()
     let cupon = $('#cupon-code').val()
     $.get('/validar-cupon/'+cupon, function(data){
-        if(data){
+        if(data){ 
             toastr.success('Cupón válido')
             let curr = $('#total_price').html()
-            $('#total_price').html(curr-data.discount_amount)
+            if(data.discount_amount){
+                $('#total_price').html(curr-data.discount_amount)
+            }else{
+                $('#total_price').html(curr-(curr*data.percentage*0.01))
+            }
             $('#cupon_id').val(data.id)
             $('#cupon-code').prop('readonly', true)
             $('#validar-btn').prop('disabled',true)

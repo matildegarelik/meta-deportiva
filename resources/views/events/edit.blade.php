@@ -128,12 +128,8 @@
                             </div>
                             <div class="form-group col-sm">
                                 <label for="main_image">Imagen principal</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name="main_image">
-                                        <label class="custom-file-label" for="exampleInputFile">Choose file..</label>
-                                    </div>
-                                </div>
+                                <input type="file" name="main_image" accept="image/png, image/jpeg">
+                                <span class="text-muted">*El tamaño debe ser de 1539px x 322px</span> 
                             </div>
                         </div>
                         <div class="row">
@@ -250,84 +246,97 @@ $('#end_date').datetimepicker({
     icons: { time: 'far fa-clock' } ,
     date: '{{$event->end_date}}'
 });
+$('#start_date').on('change.datetimepicker',function(e,od){
+  if(e.date){
+    $('input[name="end_date"]').val(($('input[name="start_date"]').val()))
+  }
+})
 
 const urlParams = new URLSearchParams(window.location.search);
 if(urlParams.get('msg') && urlParams.get('msg')!='')
     toastr.error(urlParams.get('msg'))
     function initAutocomplete() {
-  const map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: {{$event->lat}}, lng: {{$event->long}} },
-    zoom: 13,
-    mapTypeId: "roadmap",
-  });
-  // Create the search box and link it to the UI element.
-  const input = document.getElementById("pac-input");
-  const searchBox = new google.maps.places.SearchBox(input);
+      const map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: {{$event->lat}}, lng: {{$event->long}} },
+        zoom: 13,
+        mapTypeId: "roadmap",
+      });
+      // Create the search box and link it to the UI element.
+      const input = document.getElementById("pac-input");
+      const searchBox = new google.maps.places.SearchBox(input);
 
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-  // Bias the SearchBox results towards current map's viewport.
-  map.addListener("bounds_changed", () => {
-    searchBox.setBounds(map.getBounds());
-  });
+      new google.maps.Marker({
+        map,
+        //icon,
+        position: { lat: {{$event->lat}}, lng: {{$event->long}} },
+        draggable:true
+      })
 
-  let markers = [];
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      // Bias the SearchBox results towards current map's viewport.
+      map.addListener("bounds_changed", () => {
+        searchBox.setBounds(map.getBounds());
+      });
 
-  // Listen for the event fired when the user selects a prediction and retrieve
-  // more details for that place.
-  searchBox.addListener("places_changed", () => {
-    const places = searchBox.getPlaces();
-    
-    if (places.length == 0) {
-      return;
+      let markers = [];
+
+      // Listen for the event fired when the user selects a prediction and retrieve
+      // more details for that place.
+      searchBox.addListener("places_changed", () => {
+        const places = searchBox.getPlaces();
+        
+        if (places.length == 0) {
+          return;
+        }
+
+        // Clear out the old markers.
+        markers.forEach((marker) => {
+          marker.setMap(null);
+        });
+        markers = [];
+
+        // For each place, get the icon, name and location.
+        const bounds = new google.maps.LatLngBounds();
+
+        places.forEach((place) => {
+          if (!place.geometry || !place.geometry.location) {
+            console.log("Returned place contains no geometry");
+            return;
+          }
+
+          document.getElementById('lat').value = place.geometry.location.lat();
+          document.getElementById('long').value = place.geometry.location.lng();
+          $('input[name="location"]').val($('#pac-input').val());
+          //console.log($('#pac-input').val())
+
+          const icon = {
+            url: place.icon,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25),
+          };
+
+          // Create a marker for each place.
+          markers.push(
+            new google.maps.Marker({
+              map,
+            //  icon,
+              title: place.name,
+              position: place.geometry.location,
+              draggable:true
+            })
+          );
+          if (place.geometry.viewport) {
+            // Only geocodes have viewport.
+            bounds.union(place.geometry.viewport);
+          } else {
+            bounds.extend(place.geometry.location);
+          }
+        });
+        map.fitBounds(bounds);
+      });
     }
-
-    // Clear out the old markers.
-    markers.forEach((marker) => {
-      marker.setMap(null);
-    });
-    markers = [];
-
-    // For each place, get the icon, name and location.
-    const bounds = new google.maps.LatLngBounds();
-
-    places.forEach((place) => {
-      if (!place.geometry || !place.geometry.location) {
-        console.log("Returned place contains no geometry");
-        return;
-      }
-
-      document.getElementById('lat').value = place.geometry.location.lat();
-      document.getElementById('long').value = place.geometry.location.lng();
-      $('input[name="location"]').val($('#pac-input').val());
-      //console.log($('#pac-input').val())
-
-      const icon = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25),
-      };
-
-      // Create a marker for each place.
-      markers.push(
-        new google.maps.Marker({
-          map,
-          icon,
-          title: place.name,
-          position: place.geometry.location,
-        })
-      );
-      if (place.geometry.viewport) {
-        // Only geocodes have viewport.
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
-    });
-    map.fitBounds(bounds);
-  });
-}
 window.initAutocomplete = initAutocomplete;
 </script>
 

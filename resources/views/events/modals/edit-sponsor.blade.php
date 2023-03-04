@@ -31,6 +31,7 @@
                     <label for="image" class="col-sm-2 col-form-label">Cambiar Imagen</label>
                     <div class="col-sm-10">
                         <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
+                        <span class="text-muted">*El tamaño debe ser de 200px x 40px</span>
                         @error('image')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

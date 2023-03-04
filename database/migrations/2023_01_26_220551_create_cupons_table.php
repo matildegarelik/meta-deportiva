@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('cupons', function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->float('discount_amount')->default(0);
-            $table->integer('percentage')->default(0);
+            $table->float('discount_amount')->nullable();
+            $table->integer('percentage')->nullable();
             $table->date('valid_from')->useCurrent();
             $table->date('valid_to')->nullable();
             $table->integer('usage_limit')->default(999);

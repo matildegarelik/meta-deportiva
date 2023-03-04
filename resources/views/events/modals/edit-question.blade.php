@@ -15,15 +15,15 @@
                     <label for="type" class="col-sm-2 col-form-label">Tipo</label>
                     <div class="col-sm-10">
                       <select name="type" class="form-control" id="tipo-edit">
-                        <option value="1">OPEN FIELD</option>
-                        <option value="2">YES/NO</option>
-                        <option value="3">SELECT ONE OPTION</option>
+                        <option value="1">PREGUNTA ABIERTA</option>
+                        <option value="2">PREGUNTA SI / NO</option>
+                        <option value="3">OPCIÓN MÚLTIPLE</option>
                       </select>
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <label for="content" class="col-sm-2 col-form-label">Contenido</label>
+                    <label for="content" class="col-sm-2 col-form-label">Pregunta</label>
                     <div class="col-sm-10">
                       <input type="text" class="form-control @error('content') is-invalid @enderror" name="content" placeholder="Content" >
                     </div>
@@ -71,6 +71,7 @@
                     <label for="category" class="col-sm-2 col-form-label @error('category') is-invalid @enderror">Modalidad</label>
                     <div class="col-sm-10">
                       <select name="category" class="form-control">
+                            <option value="0">Todas</option> 
                             @foreach($event->categories as $cat)
                             <option value="{{$cat->id}}">{{$cat->name}}</option>
                             @endforeach

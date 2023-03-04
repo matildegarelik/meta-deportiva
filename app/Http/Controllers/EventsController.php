@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use ImageOptimizer;
 
 use App\Models\Event;
 use App\Models\EventInscripto;
@@ -15,6 +16,7 @@ use App\Models\Sponsor;
 use App\Models\Organization;
 use App\Models\Organizer;
 use App\Models\Clasification;
+use Illuminate\Support\Facades\Mail;
 
 class EventsController extends Controller
 {
@@ -61,6 +63,7 @@ class EventsController extends Controller
         if(isset($input['main_image'])){
             $imageName = time().'.'.$request->main_image->extension();
             $request->main_image->move(public_path('images/eventos/'), $imageName);
+            ImageOptimizer::optimize(public_path('images/eventos/').$imageName);
         }
 
         $event = Event::create([
@@ -118,6 +121,7 @@ class EventsController extends Controller
         if(isset($request->main_image)){
             $imageName = time().'.'.$request->main_image->extension();
             $request->main_image->move(public_path('images/eventos/'), $imageName);
+            ImageOptimizer::optimize(public_path('images/eventos/').$imageName);
         }
         if(isset($input['published'])){
             if(!count($ev->categories)){
@@ -151,11 +155,11 @@ class EventsController extends Controller
         if($input['results'] && $input['results']!=''){
             $inscriptos = EventInscripto::where('event_id',$ev->id)->all();
             foreach($inscriptos as $inscripto){
-                Mail::raw('Se han publicado los resultados del evento '.$ev->name.'. Puede verlos en '. route('participante.event',['id'=>$ev->id]), function($message)
+                /*Mail::raw('Se han publicado los resultados del evento '.$ev->name.'. Puede verlos en '. route('participante.event',['id'=>$ev->id]), function($message)
                 {
                     $message->subject('Resultados de evento disponibles!');
                     $message->to($inscripto->user->email);
-                });
+                });*/
             }
             
         }
@@ -222,7 +226,6 @@ class EventsController extends Controller
         $request->validate([
             'code'=>'required',
             'discount_amount'=>'required|numeric|gt:0',
-            'percentage'=>'required|numeric|gt:0',
             'valid_from'=>'required|date',
             'valid_to'=>'nullable|date|after:valid_from',
             'usage_limit'=>'required|integer|gt:0'
@@ -230,8 +233,8 @@ class EventsController extends Controller
         $input = $request->all();
         $cupon = Cupon::create([
             'code'=>$input['code'],
-            'discount_amount'=>$input['discount_amount'],
-            'percentage'=>$input['percentage'],
+            'discount_amount'=>$input['tipo-desc'] == 'Monto' ? $input['discount_amount'] : null,
+            'percentage'=>$input['tipo-desc'] != 'Monto' ? $input['discount_amount'] : null,
             'valid_from'=>$input['valid_from'],
             'valid_to'=>$input['valid_to'],
             'usage_limit'=>$input['usage_limit'],
@@ -245,7 +248,6 @@ class EventsController extends Controller
         $request->validate([
             'code'=>'required',
             'discount_amount'=>'required|numeric|gt:0',
-            'percentage'=>'required|numeric|gt:0',
             'valid_from'=>'required|date',
             'valid_to'=>'nullable|date|after:valid_from',
             'usage_limit'=>'required|integer|gt:0'
@@ -253,8 +255,8 @@ class EventsController extends Controller
         $input = $request->all();
         $cupon = Cupon::where('id',$request->id)->update([
             'code'=>$input['code'],
-            'discount_amount'=>$input['discount_amount'],
-            'percentage'=>$input['percentage'],
+            'discount_amount'=>$input['tipo-desc'] == 'Monto' ? $input['discount_amount'] : null,
+            'percentage'=>$input['tipo-desc'] != 'Monto' ? $input['discount_amount'] : null,
             'valid_from'=>$input['valid_from'],
             'valid_to'=>$input['valid_to'],
             'usage_limit'=>$input['usage_limit'],
@@ -279,7 +281,7 @@ class EventsController extends Controller
             'required'=>$input['required'],
             'order'=>$input['order'],
             'event_id'=>$input['event'],
-            'category_id'=>$input['category']
+            'category_id'=>$input['category'] == 0 ? null: $input['category']
         ]);
         return redirect()->route('admin.event', ['id'=>$input['event']]);
     }
@@ -296,7 +298,7 @@ class EventsController extends Controller
             'options'=> $input['type']==3 ? $input['options'] : null,
             'required'=>$input['required'],
             'order'=>$input['order'],
-            'category_id'=>$input['category']
+            'category_id'=>$input['category'] == 0 ? null: $input['category']
         ]);
         $question=Question::find($request->id);
         return redirect()->route('admin.event', ['id'=>$question->event_id]);
@@ -314,6 +316,7 @@ class EventsController extends Controller
         if(isset($input['image'])){
             $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images/eventos/sponsors/'), $imageName);
+            ImageOptimizer::optimize(public_path('images/eventos/sponsors/'). $imageName);
         }
         $sponsor = Sponsor::create([
             'name'=>$input['name'],
@@ -334,6 +337,8 @@ class EventsController extends Controller
         if(isset($input['image'])){
             $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images/eventos/sponsors/'), $imageName);
+            
+            ImageOptimizer::optimize(public_path('images/eventos/sponsors/').$imageName);
         }
         Sponsor::where('id',$request->id)->update([
             'name'=>$input['name'],

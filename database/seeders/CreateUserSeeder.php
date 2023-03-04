@@ -22,12 +22,12 @@ class CreateUserSeeder extends Seeder
                 'password'=> bcrypt('123456'),
                 'role'=>0
             ],
-            [
+            /*[
                 'name'=>'Organizador',
                 'email'=>'organizador@test.com',
                 'password'=> bcrypt('123456'),
                 'role'=>1
-            ],
+            ],*/
             [
                 'name'=>'Admin',
                 'email'=>'admin@test.com',

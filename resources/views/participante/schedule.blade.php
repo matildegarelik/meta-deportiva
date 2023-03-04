@@ -51,7 +51,7 @@
                                             <span class="year">{{date_format(new Datetime($ei->event->start_date),'Y')}}</span>
                                         </a>
                                     </div>
-                                    <a href="{{ route('participante.event',$ei->event->id) }}"><img src="{{asset('images/eventos/'.$ei->event->main_image) }}" alt="image"></a>
+                                    <a href="{{ route('participante.event',$ei->event->id) }}"><img src="{{asset(env('PUBLIC_PATH').'images/eventos/'.$ei->event->main_image) }}" alt="image"></a>
                                 </div>
                                 <div class="col-sm-7 news-item-info">
                                     <h3><a href="{{ route('participante.event',$ei->event->id) }}">{{$ei->event->name}}</a></h3>

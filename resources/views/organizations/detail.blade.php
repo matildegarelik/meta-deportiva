@@ -65,7 +65,7 @@
               <!-- ORGANIZADORES -->
               <div class="card">
                 <div class="card-header">
-                  <h3 class="card-title">Organizadores</h3>
+                  <h3 class="card-title">Contactos</h3>
                   <button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target='#add-organizer-modal'>Agregar</button>
                 </div>
                 <div class="card-body">

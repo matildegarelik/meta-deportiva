@@ -137,6 +137,7 @@
                                   </div>
                               </div>-->
                               <input type="file" name="main_image" accept="image/png, image/jpeg">
+                              <span class="text-muted">*El tamaño debe ser de 1539px x 322px</span>
                           </div>
                         </div>
                         <div class="row">
@@ -164,11 +165,11 @@
                             </div>
                             <div class="form-group col-sm-3">
                                 <label for="location">Lat.</label>
-                                <input type="text" class="form-control" name="lat" readonly id="lat">
+                                <input type="text" class="form-control" name="lat" readonly id="lat" value="{{ old('lat') }}">
                             </div>
                             <div class="form-group col-sm-3">
                               <label for="location">Long.</label>
-                              <input type="text" class="form-control" name="long" readonly id="long">
+                              <input type="text" class="form-control" name="long" readonly id="long" value="{{ old('long') }}">
                           </div>
                           @error('lat')
                               <span class="invalid-feedback" role="alert">
@@ -245,6 +246,12 @@ $('form input').keydown(function (e) {
 $('#start_date').datetimepicker({ icons: { time: 'far fa-clock' } });
 $('#end_date').datetimepicker({ icons: { time: 'far fa-clock' } });
 
+$('#start_date').on('change.datetimepicker',function(e,od){
+  if(e.date){
+    $('input[name="end_date"]').val(($('input[name="start_date"]').val()))
+  }
+})
+
 function initAutocomplete() {
   const map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: -33.8688, lng: 151.2195 },
@@ -260,6 +267,14 @@ function initAutocomplete() {
   map.addListener("bounds_changed", () => {
     searchBox.setBounds(map.getBounds());
   });
+
+  new google.maps.Marker({
+    map,
+    //icon,
+    //title:,
+    draggable:true,
+    position: { lat: -33.8688, lng: 151.2195 },
+  })
 
   let markers = [];
 
@@ -292,21 +307,14 @@ function initAutocomplete() {
       $('input[name="location"]').val($('#pac-input').val());
       //console.log($('#pac-input').val())
 
-      const icon = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25),
-      };
-
       // Create a marker for each place.
       markers.push(
         new google.maps.Marker({
           map,
-          icon,
+          //icon,
           title: place.name,
           position: place.geometry.location,
+          draggable:true
         })
       );
       if (place.geometry.viewport) {

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 class Category extends Model
 {
@@ -36,6 +37,10 @@ class Category extends Model
     }
     public function questions()
     {
-        return $this->hasMany(Question::class);
+        $qs= DB::table('questions')->where('category_id',$this->id)->orWhere(function($query) {
+            $query->where('event_id',$this->event_id)
+                  ->where('category_id',null);
+        })->get();
+        return $qs;
     }
 }

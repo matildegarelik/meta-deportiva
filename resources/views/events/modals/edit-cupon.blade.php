@@ -25,19 +25,22 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="discount_amount" class="col-sm-2 col-form-label">Descuento</label>
+                    <label for="discount_amount" class="col-sm-2 col-form-label">Tipo</label>
                     <div class="col-sm-4">
-                      <input type="number" step="0.01" class="form-control @error('discount_amount') is-invalid @enderror" name="discount_amount" placeholder="discount">
+                        <select class="form-control" name="tipo-desc" id="tipo-desc">
+                            <option>Monto</option>
+                            <option>Porcentaje</option>
+                        </select>
                     </div>
-                    <label for="percentage" class="col-sm-2 col-form-label">Porcentaje</label>
+                    <label for="percentage" class="col-sm-2 col-form-label">Valor</label>
                     <div class="col-sm-4">
-                      <input type="number" step="1" class="form-control @error('percentage') is-invalid @enderror" name="percentage" placeholder="percentage">
+                        <input type="number" step="0.01" class="form-control @error('discount_amount') is-invalid @enderror" name="discount_amount" placeholder="descuento">
+                        @error('discount_amount')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
-                    @error('percentage')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
                 </div>
 
                 <div class="form-group row">
