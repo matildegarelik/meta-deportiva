@@ -134,6 +134,7 @@
                         <th>Nombre</th>
                         <th>Email</th>
                         <th>Modalidad</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                       </tr>
                       </thead>
@@ -145,7 +146,18 @@
                               <td>{{$inscripto->email}}</td>
                               <td>{{$inscripto->categoria}}</td>
                               <td>
+                                <span style="background-color:
+                                @if($inscripto->estado == 'Confirmado')rgb(143, 225, 151) 
+                                @elseif($inscripto->estado == 'Pendiente') rgb(236, 168, 105) 
+                                @elseif($inscripto->estado == 'Cancelado') rgb(235, 125, 119) 
+                                @endif
+                                ; color:white; border-radius:5px; padding: 5px 5px;">
+                                {{$inscripto->estado}}
+                                </span>
+                              </td>
+                              <td>
                                 <a href="{{ route('admin.inscripcion', ['id'=>$inscripto->inscripcion_id]) }}"><i class="fas fa-eye ml-1"></i></a>
+                                <a href="#" class="btn-link" data-toggle="modal" data-target='#edit-inscripcion-modal' data-obj="{{json_encode($inscripto)}}"><i class="fas fa-pencil-alt ml-1"></i></a>
                                 <a href="#" class="btn-link" onclick="deleteInscripcion({{$inscripto->inscripcion_id}})"><i class="fas fa-trash ml-1"></i></a>
                               </td>
                           </tr>
@@ -331,6 +343,7 @@
     @include('events.modals.edit-question',['event'=>$event])
     @include('events.modals.add-sponsor',['id'=>$event->id])
     @include('events.modals.edit-sponsor')
+    @include('events.modals.edit-inscripcion')
   </div>
   <!-- /.content-header -->
 
@@ -395,6 +408,14 @@
       }).buttons().container().appendTo('#sponsors-table_wrapper .col-md-6:eq(0)');
 
     });
+
+    $('#edit-inscripcion-modal').on('show.bs.modal', function(e) {
+      var inscripcion = $(e.relatedTarget).data('obj');
+      console.log(inscripcion)
+      $(e.currentTarget).find('span#id-insc').html(inscripcion.inscripcion_id);
+      $(e.currentTarget).find('input[name="id"]').val(inscripcion.inscripcion_id);
+      $(e.currentTarget).find('select[name="estado"]').val(inscripcion.estado);
+      });
 
     $('#edit-category-modal').on('show.bs.modal', function(e) {
 

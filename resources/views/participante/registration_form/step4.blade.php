@@ -11,7 +11,8 @@
                 <tbody>
                     <tr>
                         <td>Total Price</td>
-                        <td class="price">USD $<span id="total_price">{{$event->categories[0]->price}}</span></td>
+                        <td class="price">MXN $<span id="total_price">{{$event->categories[0]->price}}</span></td>
+                        <input type="hidden" name="precio_total" id="total_price_input">
                     </tr>
                 </tbody>
             </table>
@@ -20,23 +21,22 @@
 </div>
 
 <div class="section-select-payment-method">
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
+   
+    <!--<ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
             <a href="#credit-card" aria-controls="credit-card" role="tab" data-toggle="tab">
                 <i class="fa fa-credit-card" aria-hidden="true"></i>
-                Credit Card
+                Pago online
             </a>
         </li>
         <li role="presentation">
             <a href="#paypal" aria-controls="paypal" role="tab" data-toggle="tab">		
-                <i class="fa fa-paypal" aria-hidden="true"></i>
-                Paypal
+                <i class="fa fa-money" aria-hidden="true"></i>
+                Efectivo
             </a>
         </li>
     </ul>
 
-    <!-- Tab panes -->
     <div class="tab-content clearfix">
         <div role="tabpanel" class="tab-pane active" id="credit-card">
             <form>
@@ -110,11 +110,11 @@
                 <button class="primary-link" type="button">Confirmar Pago</button>
             </div>
         </div>
-        
-    </div>
+    </div>-->
+    <p>Al proceder a pagar está aceptando nuestros <a style="color:blue" target="_blank" href="{{ asset(env('PUBLIC_PATH').'notice.pdf') }}">Términos y condiciones</a></p>
     <div class="section-select-payment-method-action" style="margin-bottom: 20px">
         <div class="row mb-3 text-center">
-            <button class="primary-link" type="button" onclick="registrar()">Registrarse</button>
+            <button class="primary-link" type="button" onclick="registrar()">Proceder a pagar</button>
         </div>
     </div>
 </div>

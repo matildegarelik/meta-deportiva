@@ -71,11 +71,11 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
         ]);
         if($user){
-            /*Mail::raw('Inicia sesión en tu cuenta y completa los datos de tu perfil para poder comenzar a registrarte a eventos', function($message)
+            Mail::send(['html'=>'mails.register'],['user'=>$user], function($message)
             {
                 $message->subject('Bienvenido a MetaDeportiva');
                 $message->to($user->email);
-            });*/
+            });
         }
         
         return $user;

@@ -97,7 +97,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="site-branding col-md-3">
-							<h1 class="site-title"><a href="{{route('home')}}" title="myticket" rel="home"><img src="{{ asset('assets/images/logo.png') }}" alt="logo"></a></h1>
+							<h1 class="site-title"><a href="{{route('home')}}" title="myticket" rel="home"><img src="{{ asset(env('PUBLIC_PATH').'images/main/'.env('IMG_LOGO')) }}" alt="logo"></a></h1>
 						</div>
 
 						<div class="col-md-9">
@@ -116,11 +116,14 @@
 									   <i class="fa fa-times fa-2x" aria-hidden="true"></i>
 									</button>
 									<ul class="nav navbar-nav navbar-right">
-										<li class="active"><a href="{{ route('participante.upcoming') }}">Próximos</a></li>
+										<!--<li class="active"><a href="{{ route('participante.upcoming') }}">Próximos</a></li>-->
 										<li><a href="{{ route('participante.events') }}">Explorar</a></li>
 										<li class="active"><a href="{{ route('participante.schedule') }}">Mi Agenda</a></li>
 										<li><a href="{{ route('participante.profile') }}">Perfil</a></li>
-										<li class="cart"><a href="#">0</a></li>
+										<!--<li class="cart"><a href="#">0</a></li>-->
+										@foreach($extra_pages as $page)
+											<li><a href="{{ route('participante.extra_page',['nombre'=>$page->nombre]) }}">{{$page->nombre}}</a></li>
+										@endforeach
 									</ul>
 								</div>
 							</nav>
@@ -139,7 +142,7 @@
 					<div class="row">
 						
 						<div class="col-md-8">
-							<a href="#"><img src="{{ asset('assets/images/logo.png') }}" alt="logo"></a>
+							<a href="#"><img src="{{ asset(env('PUBLIC_PATH').'images/main/'.env('IMG_LOGO')) }}" alt="logo"></a>
 						</div>
 						<div class="col-md-4">
 						

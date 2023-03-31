@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app',['extra_pages'=>$extra_pages])
 
 @section('pagetitle','Eventos')
 

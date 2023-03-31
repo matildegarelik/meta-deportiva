@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app',['extra_pages'=>$extra_pages])
 
 @section('pagetitle','Mis eventos')
 
@@ -51,11 +51,14 @@
                                             <span class="year">{{date_format(new Datetime($ei->event->start_date),'Y')}}</span>
                                         </a>
                                     </div>
-                                    <a href="{{ route('participante.event',$ei->event->id) }}"><img src="{{asset(env('PUBLIC_PATH').'images/eventos/'.$ei->event->main_image) }}" alt="image"></a>
+                                    <a href="{{ route('participante.inscripcion_view',$ei->id) }}"><img src="{{asset(env('PUBLIC_PATH').'images/eventos/'.$ei->event->main_image) }}" alt="image"></a>
                                 </div>
                                 <div class="col-sm-7 news-item-info">
-                                    <h3><a href="{{ route('participante.event',$ei->event->id) }}">{{$ei->event->name}}</a></h3>
+                                    <h3><a href="{{ route('participante.inscripcion_view',$ei->id) }}">{{$ei->event->name}}</a></h3>
                                     <span class="meta-data">Clasificacion: {{$ei->event->clasification->name}}  | Modalidad: {{$ei->category->name}}</span>
+                                    @if($ei->estado =='Pendiente') <p><span style="background-color:rgb(236, 168, 105); color:white; border-radius:5px; padding: 5px 5px;">En espera de confirmación de registro</span></p><br> @endif
+                                    @if($ei->estado =='Confirmado') <p><span style="background-color:rgb(143, 225, 151); color:white; border-radius:5px; padding: 5px 5px;">Registro confirmado</span></p><br> @endif
+                                    @if($ei->estado =='Cancelado') <p><span style="background-color:rgb(235, 125, 119); color:white; border-radius:5px; padding: 5px 5px;">Registro cancelado</span></p><br> @endif
                                     <p>Ubicación: {{$ei->event->location}}</p>
                                     <p>Horario: {{date_format(new Datetime($ei->event->start_date),'g:i A')}}</p>
                                 </div>

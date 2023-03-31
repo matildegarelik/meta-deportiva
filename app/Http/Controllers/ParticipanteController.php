@@ -10,6 +10,7 @@ use App\Models\Cupon;
 use App\Models\User;
 use App\Models\Answer;
 use App\Models\Category;
+use App\Models\ExtraPage;
 use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Http\Request;
@@ -29,7 +30,8 @@ class ParticipanteController extends Controller
         $events_active = Event::where('published',1)/*->whereDate('start_date', '>', now())*/->count();
         $users_active = User::where('role',1)->count();
         $total_register = EventInscripto::all()->count();
-        return view('participante.index', compact('clasifications','featured_events','events_active','users_active','total_register'));
+        $extra_pages = ExtraPage::where('menu',1)->get();
+        return view('participante.index', compact('clasifications','extra_pages','featured_events','events_active','users_active','total_register'));
     }
     
     public function events(Request $request)
@@ -44,12 +46,14 @@ class ParticipanteController extends Controller
         }
         $clasifications=Clasification::all();
         $events=$events->paginate(10);
-        return view('participante.events',compact('events','clasifications'));
+        $extra_pages=ExtraPage::where('menu',1)->get();
+        return view('participante.events',compact('events','clasifications','extra_pages'));
     }
     public function event($id)
     {
         $event = Event::find($id);
-        return view('participante.event_detail',compact('event'));
+        $extra_pages=ExtraPage::where('menu',1)->get();
+        return view('participante.event_detail',compact('event','extra_pages'));
     }
     public function registration_form($id)
     {
@@ -66,7 +70,8 @@ class ParticipanteController extends Controller
         $datos_completos = $participante->datos_completos();
         $edad=0;
         if($datos_completos || $participante->date_of_birth) $edad = $participante->edad();
-        return view('participante.registration_form',compact('event','participante','datos_completos','edad'));
+        $extra_pages=ExtraPage::where('menu',1)->get();
+        return view('participante.registration_form',compact('event','participante','datos_completos','edad','extra_pages'));
     }
     
     public function register(Request $request)
@@ -97,20 +102,28 @@ class ParticipanteController extends Controller
             
         }
 
+        $event_inscripto->delete();
+
+        $url = $this->pagar($event_inscripto->id,$input['precio_total']);
+        return redirect()->away($url);
+
+        //Si pasa mas de un tiempo sin pagar borrar inscripcion.
+
         /*Mail::raw('Se ha registrado al evento'.$event->name.', que transcurrirá en '.$event->location.' en la fecha '.$event->start_date, function($message)
         {
             $message->subject('Registro a evento exitoso!');
             $message->to(Auth::user()->email);
         });*/
         
-        return redirect()->route('participante.schedule');
+        //return redirect()->route('participante.schedule');
     }
 
     public function schedule()
     {
         $events = Event::all();
         $events_inscripto = Auth::user()->events_inscripto()->paginate(5);
-        return view('participante.schedule',compact('events','events_inscripto'));
+        $extra_pages=ExtraPage::where('menu',1)->get();
+        return view('participante.schedule',compact('events','events_inscripto','extra_pages'));
     }
     public function profile()
     {
@@ -123,7 +136,8 @@ class ParticipanteController extends Controller
         }else{
             $participante=Participante::where('user_id',$user_id)->first();
         }
-        return view('participante.profile',compact('participante'));
+        $extra_pages=ExtraPage::where('menu',1)->get();
+        return view('participante.profile',compact('participante','extra_pages'));
     }
     public function update_profile(Request $request)
     {
@@ -164,7 +178,8 @@ class ParticipanteController extends Controller
     public function upcoming()
     {
         $events = Event::all();
-        return view('participante.upcoming',compact('events'));
+        $extra_pages=ExtraPage::where('menu',1)->get();
+        return view('participante.upcoming',compact('events','extra_pages'));
     }
     public function validar_cupon($cupon)
     {
@@ -180,5 +195,110 @@ class ParticipanteController extends Controller
         $category = Category::find($id);
         $returnHTML = view('participante.registration_form.questions_view')->with('questions', $category->questions())->render();
         return response()->json(array('success' => true, 'html'=>$returnHTML));
+    }
+    public function inscripcion_view($id)
+    {
+        $inscripcion = EventInscripto::find($id);
+        if($inscripcion->first_time){
+            $inscripcion->first_time=0;
+            $inscripcion->save();
+            Mail::send(['html'=>'mails.inscripcion_evento'],['event'=>$inscripcion->event], function($message)
+            {
+                $message->subject('Registro a evento exitoso!');
+                $message->to(Auth::user()->email);
+            });
+        }
+        $extra_pages=ExtraPage::where('menu',1)->get();
+        return view('participante.inscripcion_view',compact('inscripcion','extra_pages'));
+    }
+
+    public function pagar($id_registro, $precio=120000){
+        $inscripcion = EventInscripto::where('id',$id_registro)->withTrashed()->first();
+        \Conekta\Conekta::setApiKey(env('CONEKTA_PRIVATE_API_KEY'));
+        $validCustomer = [
+            'name' => "Payment Link Name",
+            'email' => $inscripcion->user->email
+          ];
+        $customer = \Conekta\Customer::create($validCustomer);
+        $valid_order = array(
+            'line_items'=> array(
+              array(
+                'name'=> 'Modalidad: '. $inscripcion->category->name,
+                'description'=> $inscripcion->event->name,
+                'unit_price'=> $precio*100,
+                'quantity'=> 1,
+                //'sku'=> 'cohbs1',
+                'category'=> $inscripcion->event->clasification,
+                //'tags' => array('food', 'mexican food')
+              )
+            ),
+            'checkout' => array(
+              'allowed_payment_methods' => array("cash", "card", "bank_transfer"),
+              'type' => 'HostedPayment',
+              'success_url' => route('participante.pago_aceptado',$id_registro),
+              'failure_url' => 'https://www.mysite.com/payment/failure',
+              'monthly_installments_enabled' => true,
+              'monthly_installments_options' => array(3, 6, 9, 12),
+              "redirection_time"=> 4 //Tiempo de Redirección al Success/Failure URL, umbrales de 4 a 120 seg.
+            ),
+            'customer_info' => array(
+                'customer_id'  => $customer->id
+            ),
+            'currency'    => 'mxn',
+            'metadata'    => array('test' => 'extra info')
+          );
+
+        try {
+            $order = \Conekta\Order::create($valid_order);
+            return $order->checkout->url;
+            //header("Location: {$order->checkout->url}");
+            //return redirect()->away($order->checkout->url);
+        } catch (\Conekta\ProcessingError $e){
+            echo $e->getMessage();
+        } catch (\Conekta\ParameterValidationError $e){
+            echo $e->getMessage();
+        } /*finally (\Conekta\Handler $e){
+        echo $e->getMessage();
+        }*/
+
+    }
+    public function pago_aceptado($id_registro, Request $request){
+        \Conekta\Conekta::setApiKey(env('CONEKTA_PRIVATE_API_KEY'));
+        if(isset($request->payment_status)){
+            if($request->payment_status == 'paid'){
+                $estado = "Confirmado";
+            }elseif($request->payment_status == 'pending_payment'){
+                $estado = "Pendiente";
+            }else{
+                $estado = "Cancelado";
+            }
+
+            $order = \Conekta\Order::find($request->order_id);
+            $metodo_pago=null;
+            if(count($order->charges)) $metodo_pago=$order->charges[0]->payment_method->object.' - '.$metodo_pago=$order->charges[0]->payment_method->type;            
+
+            $inscripcion = EventInscripto::where('id',$id_registro)->withTrashed()->first();
+            $inscripcion->deleted_at = NULL;
+            $inscripcion->estado = $estado;
+            if($metodo_pago) $inscripcion->metodo_pago = $metodo_pago;
+            $inscripcion->save();
+            
+            $extra_pages=ExtraPage::where('menu',1)->get();
+
+            return redirect()->route('participante.inscripcion_view', ['id'=>$inscripcion->id,'extra_pages'=>$extra_pages]);
+        }else{
+            echo "Error en el pago";
+            return;
+        }
+    }
+    public function extra_page($nombre)
+    {
+        if(ExtraPage::where('nombre',$nombre)->count()>0){
+            $extra_page = ExtraPage::where('nombre',$nombre)->first();
+            $extra_pages=ExtraPage::where('menu',1)->get();
+            return view('participante.extra_page',compact('extra_page','extra_pages'));
+        }else{
+            abort(404);
+        }
     }
 }

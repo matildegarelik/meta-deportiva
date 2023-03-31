@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Clasification extends Model
+class ExtraPage extends Model
 {
     protected $fillable=[
-        'name','image'
+        'nombre','content','menu'
     ];
     public $timestamps = false;
+    protected $table = 'extra_pages';
 }

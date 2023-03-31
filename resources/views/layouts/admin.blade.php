@@ -45,10 +45,12 @@
         <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/daterangepicker/daterangepicker.css') }}">
         <!-- summernote -->
         <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/summernote/summernote-bs4.min.css') }}">
-	  
+        <!-- Bootstrap Color Picker -->
+        <link rel="stylesheet" href="{{ asset('assets/admin-lte/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css') }}">
+          
 
-		<!-- Custom styles for this template -->
-		<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" >
+          <!-- Custom styles for this template -->
+          <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" >
 		<link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}" >
     <style>
       body, .card-title{
@@ -64,6 +66,7 @@
         font-size: 1.3rem !important;
       }
     </style>
+    @yield('css')
 	</head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
@@ -357,6 +360,15 @@
                       </li>
                     </ul>
                   </li>
+                  <li class="nav-item">
+                    <a href="{{route('admin.frontend')}}" class="nav-link {{  str_contains(Request::segment(2),'frontend') ? 'active' : '' }}">
+                      <i class="nav-icon fas fa-palette"></i>
+                      <p>
+                        Frontend
+                      </p>
+                    </a>
+                    
+                  </li>
                   @else
 
                   <li class="nav-item">
@@ -461,6 +473,7 @@
         <script src="{{ asset('assets/admin-lte/plugins/toastr/toastr.min.js')}}"></script>
         <script src="{{ asset('../assets/ckeditor/ckeditor.js') }}"></script>
         <script src="{{ asset('../assets/ckeditor/adapters/jquery.js') }}"></script>
+        <script src="{{ asset('../assets/admin-lte/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js') }}"></script>
 
         @yield('js')
     </body>

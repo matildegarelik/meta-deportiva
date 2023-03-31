@@ -27,7 +27,7 @@ class EventsController extends Controller
     public function event($id)
     {
         $event_inscriptos = EventInscripto::where('event_id',$id)->get();
-        $inscriptos = DB::table('event_inscriptos')->select(['event_inscriptos.id as inscripcion_id','event_inscriptos.event_id','users.name as name', 'event_inscriptos.user_id', 'users.email as email','categories.name as categoria'])
+        $inscriptos = DB::table('event_inscriptos')->select(['event_inscriptos.id as inscripcion_id','event_inscriptos.estado','event_inscriptos.event_id','users.name as name', 'event_inscriptos.user_id', 'users.email as email','categories.name as categoria'])
         ->join('categories','categories.id','=','event_inscriptos.category_id')    
         ->join('users','users.id','=','event_inscriptos.user_id')->where('event_inscriptos.event_id',$id)->get();
         $categories = Category::where('event_id',$id)->get();
@@ -117,6 +117,7 @@ class EventsController extends Controller
         $input = $request->all();
         $id=$input['id'];
         $ev = Event::find($id);
+        $old_results =$ev->results;
         $imageName=$ev->main_image;
         if(isset($request->main_image)){
             $imageName = time().'.'.$request->main_image->extension();
@@ -152,14 +153,14 @@ class EventsController extends Controller
         );
         DB::table('events')->where('id',$id)->update($event);
 
-        if($input['results'] && $input['results']!=''){
-            $inscriptos = EventInscripto::where('event_id',$ev->id)->all();
+        if($input['results'] && $input['results']!='' && $old_results!=$input['results']){
+            $inscriptos = EventInscripto::where('event_id',$ev->id)->get();
             foreach($inscriptos as $inscripto){
-                /*Mail::raw('Se han publicado los resultados del evento '.$ev->name.'. Puede verlos en '. route('participante.event',['id'=>$ev->id]), function($message)
+                Mail::send(['html'=>'mails.results'],['event_name'=>$ev->name,'event_id'=>$ev->id], function($message)
                 {
                     $message->subject('Resultados de evento disponibles!');
                     $message->to($inscripto->user->email);
-                });*/
+                });
             }
             
         }
@@ -361,5 +362,15 @@ class EventsController extends Controller
         $ei = EventInscripto::find($id);
         $ei->answers()->delete();
         return EventInscripto::destroy($id);
+    }
+    public function update_inscripcion(Request $request)
+    {
+        $input = $request->all();
+        $ei= EventInscripto::find($request->id);
+        
+        EventInscripto::where('id',$request->id)->update([
+            'estado'=>$input['estado']
+        ]);
+        return redirect()->route('admin.event', ['id'=>$ei->event_id]);
     }
 }

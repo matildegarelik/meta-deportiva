@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app',['extra_pages'=>$extra_pages])
 
 @section('pagetitle','Registro a evento')
 
@@ -121,7 +121,7 @@ th,td{
                                 <tbody>
                                     <tr>
                                         <td>Total Price</td>
-                                        <td class="price">USD $134</td>
+                                        <td class="price">MXN$ 134</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -269,7 +269,6 @@ $(function() {
                 if(type==1){
                     selector= `textarea[name="ans-${id}"]`
                 }
-                //$(selector).val()
                 if(!$(selector).val() || $(selector).val()=='' || $(selector).val()==null){
                     e.preventDefault()
                     all_required=false;
@@ -277,8 +276,6 @@ $(function() {
                 if(!all_required){
                     toastr.warning('Responder todas las preguntas requeridas')
                 }
-                
-                //if($(this).hasClass('selected')) selected_cat=true
             })
         }
     });
@@ -295,6 +292,7 @@ $('tr').on('click', function(){
             $('#input-cat').val(cat_id)
             let precio = $(this).data('precio')
             $('#total_price').html(precio)
+            $('#total_price_input').val(precio)
         }
     }
 })
@@ -306,9 +304,11 @@ function validarCupon(){
             toastr.success('Cupón válido')
             let curr = $('#total_price').html()
             if(data.discount_amount){
+                $('#total_price_input').val(curr-data.discount_amount)
                 $('#total_price').html(curr-data.discount_amount)
             }else{
                 $('#total_price').html(curr-(curr*data.percentage*0.01))
+                $('#total_price_input').val(curr-(curr*data.percentage*0.01))
             }
             $('#cupon_id').val(data.id)
             $('#cupon-code').prop('readonly', true)
@@ -325,11 +325,34 @@ function registrar(){
         if($(this).hasClass('selected')) selected_cat=true
     })
     if(selected_cat){
-        $('#form-registro').submit()
+        if(!'{{$datos_completos}}' || '{{$datos_completos}}'==''){
+            toastr.error('Completar datos personales antes de continuar')
+            return;
+        }
+        let all_required=true;
+        $('div.question-req').each(function(ev){
+            let id = $(this).data('id');
+            let type = $(this).data('type');
+            let selector = `input[name="ans-${id}"]:checked`
+            if(type==1){
+                selector= `textarea[name="ans-${id}"]`
+            }
+            if(!$(selector).val() || $(selector).val()=='' || $(selector).val()==null){
+                all_required=false;
+            }
+        })
+        if(!all_required){
+            toastr.warning('Responder todas las preguntas requeridas')
+            return;
+        }else{
+            $('#form-registro').submit()
+        }
+        
+        
     }else{
         toastr.warning('Seleccionar modalidad')
     }
-    // chequear si estan respondidas las preguntas obligatorias y todos los datos personales
+    
 }
 </script>
 @endsection

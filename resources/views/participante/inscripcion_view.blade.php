@@ -1,6 +1,6 @@
 @extends('layouts.app',['extra_pages'=>$extra_pages])
 
-@section('pagetitle','Event')
+@section('pagetitle','Inscripcion')
 
 @section('css')
 <style>
@@ -15,7 +15,7 @@
     top: 3px;
 }
 .section-event-single-featured-header {
-    background: url(../{{env('PUBLIC_PATH')}}images/eventos/{{$event->main_image}}) no-repeat center center;
+    background: url(../{{env('PUBLIC_PATH')}}images/eventos/{{$inscripcion->event->main_image}}) no-repeat center center;
 }
 .results-btn{
     margin-left:20px;
@@ -26,6 +26,9 @@
     background:#ff5700 !important;
     color:#fff !important;
 }
+table#detalles_inscripcion, td, th{
+    border: 1px solid;
+}
 </style>
 @endsection
 
@@ -34,10 +37,10 @@
 <section class="section-event-single-featured-header">
     <div class="container">
         <div class="section-content">
-            <h1>{{$event->name}}</h1> 
+            <h1>{{$inscripcion->event->name}}</h1> 
             <p>
                 <span>
-                    <i class="fa fa-map-marker" aria-hidden="true"></i> {{$event->location}}
+                    <i class="fa fa-map-marker" aria-hidden="true"></i> {{$inscripcion->event->location}}
                 </span>
             </p>
         </div>
@@ -46,23 +49,69 @@
 
 <section class="section-event-single-header">
     <div class="container">
-        <h1>{{$event->name}}</h1>
+        <h1>{{$inscripcion->event->name}}</h1>
         <ul class="ticket-purchase">
             <li>
-                Precio desde
+                {{date_format(new Datetime($inscripcion->event->start_date),'l')}} <br>
+                {{date_format(new Datetime($inscripcion->event->start_date),'F  j, Y')}}
             </li>
             <li>
-                <span>${{$event->starter_price()}}</span>
+                <span>{{date_format(new Datetime($inscripcion->event->start_date),'g:i A')}}</span>
             </li>
+            
+            @if($inscripcion->event->results)
             <li>
-                <a href="{{  route('participante.registration_form', $event->id)}}">Registrarse</a>
-            </li>
-            @if($event->results)
-            <li>
-                <a href="{{ $event->results}}" target="_blank" class="results-btn">Ver resultados</a>
+                <a href="{{ $inscripcion->event->results}}" target="_blank" class="results-btn">Ver resultados</a>
             </li>
             @endif
         </ul>
+    </div>
+</section>
+
+<section class="section-event-single-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12" style="border: 1.5px solid; border-radius: 10px; background-color:white; padding: 10px 10px;">
+                <h2 style="font-size: 25px;">DETALLES INSCRIPCIÓN  #{{$inscripcion->id}}</h2>
+                <br>
+                <table id="detalles_inscripcion">
+                    <tr>
+                        <td>Modalidad: </td>
+                        <td>{{$inscripcion->category->name}}</td>
+                        <td>Fecha Registro: </td>
+                        <td>{{$inscripcion->created_at}}</td>
+                        </tr>
+                    <tr>
+                        <td>Estado:</td>
+                        <td>
+                            <span style="background-color:
+                                @if($inscripcion->estado == 'Confirmado')rgb(143, 225, 151) 
+                                @elseif($inscripcion->estado=='Pendiente') rgb(236, 168, 105) 
+                                @elseif($inscripcion->estado=='Cancelado') rgb(235, 125, 119)
+                                @endif
+                                ; color:white; border-radius:5px; padding: 5px 5px;">
+                                @if($inscripcion->estado == 'Confirmado') Registro confirmado 
+                                @elseif($inscripcion->estado=='Pendiente') En espera de confirmación 
+                                @elseif($inscripcion->estado=='Cancelado') Registro cancelado
+                                @endif
+                            </span>
+                        </td>
+                        <td>Método de pago:</td>
+                        <td>{{$inscripcion->metodo_pago}}</td>
+                    </tr>
+                    <tr><td colspan="4"></td></tr>
+                    <tr><td colspan="4"><b>Respuestas</b></td></tr>
+                    @foreach($inscripcion->answers as $answer)
+                    <tr>
+                        <td colspan="2">{{$answer->question->content}}</td>
+                        <td colspan="2">{{$answer->answer}}</td>
+                    </tr>
+
+                    @endforeach
+
+                </table>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -119,13 +168,13 @@
                     </div>
                 </div>-->
                 <div class="event-highlights">
-                    {!! $event->description !!}
+                    {!! $inscripcion->event->description !!}
                 </div>
             </div>
         </div>
     </div>
 </section>
-@if(count($event->sponsors))
+@if(count($inscripcion->event->sponsors))
 <section class="section-event-single-content">
     <div class="container">
         <div class="row">
@@ -133,7 +182,7 @@
                 <div class="event-highlights">
                     <h2>Sponsors</h2>
                     <div class="row">
-                        @foreach($event->sponsors as $sponsor)
+                        @foreach($inscripcion->event->sponsors as $sponsor)
                         <div class="col-sm-3">
                             <a href="#">
                                 <img src="{{ asset(env('PUBLIC_PATH').'images/eventos/sponsors/'.$sponsor->image) }}" alt="image" style="height: 50px;">
@@ -153,7 +202,7 @@
             <div id="primary" class="col-sm-12 col-md-12">
                 <div class="event-location">
                     <h2>Ubicación</h2>
-                    <p>{{$event->location}}</p>
+                    <p>{{$inscripcion->event->location}}</p>
                 </div>
             </div>
         </div>
@@ -169,7 +218,7 @@
         allowfullscreen
         referrerpolicy="no-referrer-when-downgrade"
         src="https://www.google.com/maps/embed/v1/place?key=AIzaSyC1ftWVTDrIHJfgbBUHeyEJmDbovqpozD4
-            &q={{urlencode($event->location)}}&center={{$event->lat}},{{$event->long}}">
+            &q={{urlencode($inscripcion->event->location)}}&center={{$inscripcion->event->lat}},{{$inscripcion->event->long}}">
     </iframe>
 </section>
 

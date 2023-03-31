@@ -27,6 +27,27 @@
           <div class="row">
             <div class="col-12">
               <div class="card">
+                <div class="card-body px-3">
+                  <div class="form-group row">
+                      <ul>
+                        <li>Fecha registro: {{$inscripcion->created_at}}</li>
+                        <li>Estado: 
+                          <span style="background-color:
+                              @if($inscripcion->estado == 'Confirmado')rgb(143, 225, 151) 
+                              @elseif($inscripcion->estado == 'Pendiente') rgb(236, 168, 105) 
+                              @elseif($inscripcion->estado == 'Cancelado') rgb(235, 125, 119) 
+                              @endif
+                              ; color:white; border-radius:5px; padding: 1px 5px;">
+                              {{$inscripcion->estado}}
+                            </span>
+                        </li>
+                        <li>Método de pago: {{$inscripcion->metodo_pago}}</li>
+                      </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
                 <div class="card-header">
                   <h3 class="card-title">Datos Participante</h3>
                 </div>
@@ -165,7 +186,10 @@
                 <!-- /.card-header -->
                 <div class="card-body px-3">
                   <p>Código: <b>{{$inscripcion->cupon->code}}</b></p>
-                  <p>Descuento <b>{{$inscripcion->cupon->discount_amount}}</b></p>
+                  <p>Descuento: <b>
+                    @if($inscripcion->cupon->discount_amount) ${{$inscripcion->cupon->discount_amount}}
+                    @else {{$inscripcion->cupon->percentage}}% @endif
+                  </b></p>
                 </div>
               </div>
               @endif

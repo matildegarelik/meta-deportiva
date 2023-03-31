@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Mail;
 Route::get('/', [ParticipanteController::class, 'index'])->name('home');
 Route::get('/events', [ParticipanteController::class, 'events'])->name('participante.events');
 Route::get('/event-detail/{id}', [ParticipanteController::class, 'event'])->name('participante.event');
+Route::get('/extra/{nombre}', [ParticipanteController::class, 'extra_page'])->name('participante.extra_page');
 
 
 
@@ -42,6 +43,9 @@ Route::middleware(['auth','user-role:participante'])->group(function(){
     Route::get('/upcoming', [ParticipanteController::class, 'upcoming'])->name('participante.upcoming');
     Route::get('/validar-cupon/{cupon}',[ParticipanteController::class, 'validar_cupon'])->name('participante.validar_cupon');
     Route::get('/questions-view/{id}',[ParticipanteController::class, 'questions_view'])->name('participante.questions_view');
+    Route::get('/inscripcion/{id}',[ParticipanteController::class, 'inscripcion_view'])->name('participante.inscripcion_view');
+    Route::get('/pagar/{id_registro}',[ParticipanteController::class, 'pagar'])->name('participante.pagar');
+    Route::get('/pago-aceptado/{id_registro}',[ParticipanteController::class, 'pago_aceptado'])->name('participante.pago_aceptado');
 });
 
 // Organizador Route
@@ -74,6 +78,7 @@ Route::middleware(['auth','user-role:admin,organizador'])->group(function(){
     
     Route::get('/admin/inscripcion/{id}', [EventsController::class, 'inscripcion'])->name('admin.inscripcion');
     Route::get('/admin/event/delete-inscripcion/{id}', [EventsController::class, 'delete_inscripcion'])->name('admin.event.delete_inscripcion');
+    Route::post('/admin/event/update-inscripcion', [EventsController::class, 'update_inscripcion'])->name('admin.event.update_inscripcion');
     
 });
 
@@ -97,6 +102,13 @@ Route::middleware(['auth','user-role:admin'])->group(function(){
     Route::post('/admin/organization/add-organizer', [OrganizationsController::class, 'create_organizer'])->name('admin.organization.register_organizer');
     Route::post('/admin/organization/update-organizer', [OrganizationsController::class, 'update_organizer'])->name('admin.organization.update_organizer');
     Route::get('/admin/organization/delete-organizer/{id}', [OrganizationsController::class, 'delete_organizer'])->name('admin.organization.delete_organizer');
+
+    Route::get('/admin/frontend', [AdministradorController::class, 'index_frontend'])->name('admin.frontend');
+    Route::post('/admin/update-frontend', [AdministradorController::class, 'update_frontend'])->name('admin.update_frontend');
+    Route::post('/admin/new-page',[AdministradorController::class,'new_page'])->name('admin.new_page');
+    Route::post('/admin/update-page', [AdministradorController::class, 'update_page'])->name('admin.update_page');
+    Route::get('/admin/delete-page/{id}', [AdministradorController::class, 'delete_page'])->name('admin.delete_page');
+
 });
 /*Route::get('send_test_email', function(){
 	Mail::raw('Sending emails with Mailgun and Laravel is easy!', function($message)

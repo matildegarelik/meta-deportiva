@@ -1,6 +1,25 @@
-@extends('layouts.app')
+@extends('layouts.app',['extra_pages'=>$extra_pages])
 
 @section('pagetitle','Homepage')
+
+@section('css')
+<style>
+    .hero-1{
+        background: url("{{env('PUBLIC_PATH')}}images/main/{{env('IMG_1')}}") no-repeat center center;
+    }
+    .hero-1:after, .section-newsletter:before{
+        background: #{{env('COLOR')}};
+        opacity: {{env('OPACITY')}};
+    }
+    .section-stats{
+        background: url("{{env('PUBLIC_PATH')}}images/main/{{env('IMG_2')}}") no-repeat center center;
+    }
+    
+    .section-newsletter{
+        background: url("{{env('PUBLIC_PATH')}}images/main/{{env('IMG_3')}}") no-repeat center center;
+    }
+</style>
+@endsection
 
 @section('content')
 
@@ -8,13 +27,13 @@
     <div class="container">
         <div class="row">
             <div class="hero-content">
-                <h1 class="hero-title">Make Your Dream Come True</h1>
-                <p class="hero-caption">Meet your favorite artists, sport teams and parties</p>
+                <h1 class="hero-title">{{env('TITULO')}}</h1>
+                <p class="hero-caption">{{env('SUBTITULO')}}</p>
                 <div class="hero-search">
-                    <input type="text" placeholder="Seach Artist, Team, or Venue" id="search-input">
+                    <input type="text" placeholder="Buscar eventos" id="search-input">
                 </div>
                 <div class="hero-location">
-                    <p><i class="fa fa-map-marker" aria-hidden="true"></i> San Francisco <a href="#">Change Location</a></p>
+                    <p><i class="fa fa-map-marker" aria-hidden="true"></i>{{env('UBICACION')}}</p>
                 </div>
             </div>
         </div>
@@ -26,8 +45,7 @@
         <div class="row">
             <div class="section-header">
                 <h2>Eventos patrocinados</h2>
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut.</p>
-                <a href="{{route('participante.events')}}">Ver todos los próximos eventos</a>
+                <a href="{{route('participante.events')}}" style="margin-top:-40px">Ver todos los próximos eventos</a>
             </div>
             <div class="section-content">
                 <ul class="clearfix">
@@ -65,7 +83,7 @@
                 <ul class="row clearfix">
                     @foreach($clasifications as $clasif)
                     <li class="category-{{$clasif->id}} col-sm-4">
-                        <img src="{{ asset('assets/images/event-category-'.$clasif->id.'.jpg') }}" alt="image">
+                        <img src="{{ asset(env('PUBLIC_PATH').'images/main/clasifications/'.$clasif->image) }}" alt="{{$clasif->name}}">
                         <a href="{{route('participante.events')}}?clasification={{$clasif->id}}"><span>{{$clasif->name}}</span></a>
                     </li>
                     @endforeach
@@ -101,7 +119,7 @@
     </div>
 </section>
 
-<section class="section-video-parallax">
+<!--<section class="section-video-parallax">
     <div class="container">
         <div class="section-content">
             <h2>LIVE THERE</h2>
@@ -138,7 +156,7 @@
             </ul>
         </div>
     </div>
-</section>
+</section>-->
 
 <section class="section-newsletter">
     <div class="container">
@@ -163,5 +181,6 @@
         if(searchStr.trim()!='')
             window.location.href="{{route('participante.events')}}?search="+searchStr
     })
+    
 </script>
 @endsection
